@@ -9,14 +9,14 @@
     </div>
     <span class="line"> | </span>
     <div class="work">
-      <el-button text :icon="HomeFilled" @click="toWork">工作台</el-button>
+      <el-button text :icon="HomeFilled" size="small" @click="toWork">工作台</el-button>
     </div>
     <div class="right-menu">
       <div class="search">
-        <el-input v-model="input" placeholder="请输入要搜索的内容" :prefix-icon="Search" />
+        <el-input v-model="input" placeholder="请输入要搜索的内容" :prefix-icon="Search" size="small" />
       </div>
       <div class="support">
-        <el-button text bg>支持</el-button>
+        <el-button text bg size="small">支持</el-button>
       </div>
       <div class="help">
         <el-tooltip class="box-item" effect="dark" content="有两条未读消息" placement="bottom">
@@ -125,14 +125,14 @@ onMounted(() => {
 
     img {
       margin: 0 5px 0 0px;
-      width: 80px;
+      width: 50px;
     }
 
     span {
       line-height: 50px;
       color: #c1c6c8;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       text-decoration: none;
       vertical-align: middle;
@@ -200,8 +200,8 @@ onMounted(() => {
       img {
         margin: 0 5px 0 0px;
         display: block;
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
         border-radius: 50%;
       }
 

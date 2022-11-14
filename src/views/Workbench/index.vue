@@ -197,7 +197,7 @@ onMounted(() => {
   }
 
   .body-wrap {
-    width: 1360px;
+    width: 90vw;
     margin: 0 auto;
     margin-top: 52px;
   }
