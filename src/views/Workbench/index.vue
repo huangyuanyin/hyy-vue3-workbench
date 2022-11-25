@@ -40,7 +40,7 @@
             </el-tab-pane>
             <el-tab-pane label="运维管理" name="third">
               <div class="cloud-alarm">
-                <el-card style="height:30vh;width: 100%;margin-bottom: 20px;">
+                <el-card style="height:35vh;width: 100%;margin-bottom: 20px;">
                   <div class="cloud-alarm-title">
                     <span>运维安全概览</span>
                   </div>
@@ -81,7 +81,7 @@
                 </el-card>
               </div>
               <div class="OperationandMaintenanceManagement">
-                <el-card style="height:30vh;width: 49%;">
+                <el-card style="height:35vh;width: 49%;">
                   <div class="operationan-title">
                     <span>云监控</span>
                     <span class="operationan-regionName">【陶然亭】</span>
@@ -101,7 +101,7 @@
                     </div>
                   </div>
                 </el-card>
-                <el-card style="height:30vh;width: 49%;">
+                <el-card style="height:35vh;width: 49%;">
                   <div class="operationan-title">
                     <span>ESC资源监控</span>
                   </div>
