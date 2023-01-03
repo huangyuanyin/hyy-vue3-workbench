@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(__dirname, "src")
       }
     },
+    base: "/networkbench/",
     // base: env.VITE_API_BASE_URL,
     // define:{
     //   'process.env.VITE_API_BASE_URL':JSON.stringify(env.VITE_API_BASE_URL)
@@ -48,6 +49,9 @@ export default defineConfig(({ mode }) => {
         preProcessor: 'scss',
         patterns: []
       }
+    },
+    build: {
+      chunkSizeWarningLimit: 1600,
     }
   }
 
