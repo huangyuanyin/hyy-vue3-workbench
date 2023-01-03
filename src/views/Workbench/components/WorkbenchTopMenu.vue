@@ -54,51 +54,49 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from "vue"
-import logo from "@/assets/logo.png"
-import user from "@/assets/user.png"
-import { useUserStore } from "@/store/modules/user"
-import { HomeFilled, ArrowDown, QuestionFilled, BellFilled, Search, Operation, CloseBold } from "@element-plus/icons-vue"
-import Drawer from "@/components/Drawer.vue"
-import { useRouter } from "vue-router"
-import { ElMessage } from "element-plus"
+import { reactive, ref, onMounted } from "vue";
+import logo from "@/assets/logo.png";
+import user from "@/assets/user.png";
+import { useUserStore } from "@/store/modules/user";
+import { HomeFilled, ArrowDown, QuestionFilled, BellFilled, Search, Operation, CloseBold } from "@element-plus/icons-vue";
+import Drawer from "@/components/Drawer.vue";
+import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
 
-const router = useRouter()
-const store = useUserStore()
-const input = ref("")
-const drawer = ref(false)
+const router = useRouter();
+const store = useUserStore();
+const input = ref("");
+const drawer = ref(false);
 const data = reactive({
   username: JSON.parse(localStorage.getItem("userInfo"))?.nickname,
-  button: [{ name: "个人中心" }, { name: "退出登录" }]
-})
+  button: [{ name: "个人中心" }, { name: "退出登录" }],
+});
 
 const openDrawer = (val) => {
-  val === "open" ? (drawer.value = true) : (drawer.value = false)
-}
+  val === "open" ? (drawer.value = true) : (drawer.value = false);
+};
 
 const toLink = (index) => {
   switch (index) {
     case 0:
-      ElMessage.warning("暂不支持")
+      ElMessage.warning("暂不支持");
       break;
     case 1:
       store.LoginOut();
       router.push("/login");
       break;
   }
-}
+};
 
 const toWork = () => {
-  router.push("/workbench")
-}
+  router.push("/workbench");
+};
 
 const changeDrawer = (drawer) => {
-  openDrawer(drawer)
-}
+  openDrawer(drawer);
+};
 
-onMounted(() => {
-})
-
+onMounted(() => {});
 </script>
 
 <style lang="scss" scoped>
@@ -152,8 +150,6 @@ onMounted(() => {
     .el-button {
       background-color: #f4f6f7;
     }
-
-    .el-button:hover {}
   }
 
   .right-menu {
@@ -163,10 +159,6 @@ onMounted(() => {
 
     .support {
       margin: 0 12px;
-
-      .el-button.is-text:not(.is-disabled).is-has-bg.el-button.is-text:not(.is-disabled).is-has-bg {
-        // background-color: #242f42;
-      }
     }
 
     .help {

@@ -8,39 +8,14 @@
         <div class="body-wrap">
           <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
             <el-tab-pane label="概览" name="first">
-              <el-card style="height:80vh">
-                概览
-              </el-card>
+              <el-card style="height: 80vh"> 概览 </el-card>
             </el-tab-pane>
-            <el-tab-pane label="资源管理" name="second" class="resource-wrap">
-              <el-card style="height:80vh">
-                <div class="my-resource-title">
-                  <span class="title">我的资源</span>
-                  <span class="cloud-regionName">【全局】</span>
-                </div>
-                <div class="my-resources-view-resources-tip">部分资源可能会由于未接入服务，而无法在此模块中展示。</div>
-                <el-table :data="tableData" border style="width: 100%">
-                  <el-table-column prop="date" label="IP地址" width="180" />
-                  <el-table-column prop="name" label="设备信息" width="180" />
-                  <el-table-column prop="address" label="容器资源" />
-                  <el-table-column prop="address" label="设备资源状态" />
-                  <el-table-column prop="address" label="状态" />
-                  <el-table-column fixed="right" label="操作" align="center">
-                    <template #default="item">
-                      <el-button link type="primary" size="small">
-                        编辑
-                      </el-button>
-                      <el-button link type="danger" size="small">
-                        删除
-                      </el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-card>
+            <el-tab-pane label="资源管理" name="resourceManagement">
+              <ResourceManagement />
             </el-tab-pane>
             <el-tab-pane label="运维管理" name="third">
               <div class="cloud-alarm">
-                <el-card style="height:35vh;width: 100%;margin-bottom: 20px;">
+                <el-card style="height: 35vh; width: 100%; margin-bottom: 20px">
                   <div class="cloud-alarm-title">
                     <span>运维安全概览</span>
                   </div>
@@ -81,7 +56,7 @@
                 </el-card>
               </div>
               <div class="OperationandMaintenanceManagement">
-                <el-card style="height:35vh;width: 49%;">
+                <el-card style="height: 35vh; width: 49%">
                   <div class="operationan-title">
                     <span>云监控</span>
                     <span class="operationan-regionName">【陶然亭】</span>
@@ -101,7 +76,7 @@
                     </div>
                   </div>
                 </el-card>
-                <el-card style="height:35vh;width: 49%;">
+                <el-card style="height: 35vh; width: 49%">
                   <div class="operationan-title">
                     <span>ESC资源监控</span>
                   </div>
@@ -112,8 +87,7 @@
                         <span>0%</span>
                       </div>
                       <div>
-                        <el-progress :text-inside="false" :show-text="false" type="line" :stroke-width="20"
-                          status="exception" style="width: 100%;height:10px;" />
+                        <el-progress :text-inside="false" :show-text="false" type="line" :stroke-width="20" status="exception" style="width: 100%; height: 10px" />
                       </div>
                     </div>
                     <div class="ecs-target-item">
@@ -131,9 +105,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="安全中心" name="fourth">
-              <el-card style="height:80vh">
-                安全中心
-              </el-card>
+              <el-card style="height: 80vh"> 安全中心 </el-card>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -142,42 +114,41 @@
   </div>
 </template>
 
-<script lang='ts' setup>
-import { ref, onMounted } from 'vue'
-import type { TabsPaneContext } from 'element-plus'
-import WorkbenchTopMenu from './components/WorkbenchTopMenu.vue'
+<script lang="ts" setup>
+import { ref, onMounted } from "vue";
+import type { TabsPaneContext } from "element-plus";
+import WorkbenchTopMenu from "./components/WorkbenchTopMenu.vue";
+import ResourceManagement from "../resourceManagement/index.vue";
 
-const activeName = ref('first')
+const activeName = ref("first");
 const tableData = [
   {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
   },
   {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
   },
   {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
   },
   {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
   },
-]
+];
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
+  console.log(tab, event);
+};
 
-onMounted(() => {
-
-})
+onMounted(() => {});
 </script>
 
 <style lang="scss" scoped>
@@ -203,10 +174,9 @@ onMounted(() => {
   }
 }
 
-
 .body-wrap::before {
   content: "";
-  transition: opacity .4s ease-out;
+  transition: opacity 0.4s ease-out;
   display: block;
   opacity: 1;
   width: 100%;
@@ -221,34 +191,10 @@ onMounted(() => {
   left: 0;
 }
 
-.resource-wrap {
-  .my-resource-title {
-    .title {
-      font-size: 18px;
-      color: #252B3A;
-      font-weight: 800;
-      margin-right: 5px;
-    }
-
-    .cloud-regionName {
-      font-size: 14px;
-      line-height: 20px;
-      color: #8A8E99;
-    }
-  }
-
-  .my-resources-view-resources-tip {
-    line-height: 30px;
-    font-size: 14px;
-    color: #8A8E99;
-    margin-bottom: 30px;
-  }
-}
-
 .cloud-alarm {
   .cloud-alarm-title {
     font-size: 18px;
-    color: #252B3A;
+    color: #252b3a;
     font-weight: 800;
     margin-right: 5px;
     margin-bottom: 30px;
@@ -268,7 +214,7 @@ onMounted(() => {
         display: block;
         margin-top: 10px;
         font-size: 40px;
-        color: #67C23A;
+        color: #67c23a;
       }
 
       .percentage-label {
@@ -321,7 +267,6 @@ onMounted(() => {
       .btn-div {
         font-size: 12px;
       }
-
     }
   }
 }
@@ -332,7 +277,7 @@ onMounted(() => {
 
   .operationan-title {
     font-size: 18px;
-    color: #252B3A;
+    color: #252b3a;
     font-weight: 800;
     margin-right: 5px;
     margin-bottom: 30px;
@@ -340,7 +285,7 @@ onMounted(() => {
     .operationan-regionName {
       font-size: 14px;
       line-height: 20px;
-      color: #8A8E99;
+      color: #8a8e99;
     }
   }
 
@@ -360,7 +305,7 @@ onMounted(() => {
       font-size: 14px;
       border-radius: 2px;
       cursor: pointer;
-      border-bottom: 1px dashed #DFE1E6;
+      border-bottom: 1px dashed #dfe1e6;
     }
   }
 
@@ -401,14 +346,12 @@ onMounted(() => {
       .line {
         height: 0;
         width: 100%;
-        border-bottom: 1px dashed #DFE1E6;
+        border-bottom: 1px dashed #dfe1e6;
         flex: 1;
         margin: 0 30px;
       }
     }
-
   }
-
 }
 </style>
 
@@ -419,12 +362,12 @@ onMounted(() => {
   }
 }
 
-.el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
-  border-color: #409eff;
+.workbench-wrap {
+  .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
+    border-color: #409eff;
+  }
 }
-
 .demo-tabs {
-
   .el-tabs__item:hover {
     color: #409eff;
     border-color: #409eff;
@@ -439,8 +382,7 @@ onMounted(() => {
 
   .el-tabs__item {
     font-size: 14px;
-    color: #fff
+    color: #fff;
   }
-
 }
 </style>
