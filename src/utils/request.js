@@ -5,10 +5,6 @@ import { getToken } from "./auth";
 import baseUrl from "@/config/api";
 
 const service = axios.create({
-  // baseURL:"http://ceshi13.dishait.cn/"
-  // baseURL:"http://10.20.84.55:8000/",
-  // baseURL: "http://10.20.70.89:8082", // 登录
-  // baseDatasURL:"http://10.20.86.27:8015", // POC测试
   // baseURL: '/api',
   timeout: 12000,
 });
@@ -18,7 +14,6 @@ service.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
     // 往header头中自动添加token
-
     const hastoken = getToken();
     if (
       hastoken &&
@@ -29,9 +24,6 @@ service.interceptors.request.use(
       config.headers["token"] = hastoken;
     }
     switch (config.urlType) {
-      case "POC":
-        config.url = baseUrl.Base_POC_URL + config.url;
-        break;
       case "Xterm":
         config.url = baseUrl.Base_Xterm_URL + config.url;
         break;
