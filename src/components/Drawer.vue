@@ -45,6 +45,10 @@
               </el-icon>
               <template #title>信安云网管</template>
             </el-menu-item>
+            <el-menu-item index="netapv">
+              <el-icon><TrendCharts /></el-icon>
+              <template #title>APV自动化</template>
+            </el-menu-item>
           </el-menu>
         </el-col>
         <el-col :span="20">
@@ -105,7 +109,7 @@
 <script lang="ts" setup>
 import { defineProps, ref, computed } from "vue";
 import { ElMessage } from "element-plus";
-import { Grid, Monitor, ArrowRight, Close, Suitcase, Platform, Notebook, Position } from "@element-plus/icons-vue";
+import { Grid, Monitor, ArrowRight, Close, Suitcase, Platform, Notebook, Position, TrendCharts } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { useAppStore } from "@/store/modules/app";
 
@@ -216,9 +220,10 @@ const goTo = (value: any) => {
 // 侧边栏响应
 const handleSelect = (value: any) => {
   let url = "";
-  let console_url = sessionStorage.getItem("CONSOLE_URL");
+  let console_url = sessionStorage.getItem("CONSOLE_URL") || "http://10.4.150.55:8080/";
   localStorage.setItem("jwtToken", sessionStorage.getItem("token"));
   url = console_url + "/" + value;
+  console.log("大大", url);
   window.location.href = url;
 };
 const direction = ref("ltr");
