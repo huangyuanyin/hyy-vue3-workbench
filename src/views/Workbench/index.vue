@@ -6,14 +6,32 @@
       </el-header>
       <el-container>
         <div class="body-wrap">
-          <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-            <el-tab-pane label="概览" name="first">
-              <el-card style="height: 80vh"> 概览 </el-card>
+          <el-tabs v-model="activeName" class="demo-tabs" type="card" @tab-click="handleClick">
+            <el-tab-pane name="overview">
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><calendar /></el-icon>
+                  <span>概览</span>
+                </span>
+              </template>
+              <Overview />
             </el-tab-pane>
-            <el-tab-pane label="资源管理" name="resourceManagement">
+            <el-tab-pane name="resourceManagement">
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><TrendCharts /></el-icon>
+                  <span>资源管理</span>
+                </span>
+              </template>
               <ResourceManagement />
             </el-tab-pane>
-            <el-tab-pane label="运维管理" name="third">
+            <el-tab-pane name="third">
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><Ticket /></el-icon>
+                  <span>运维管理</span>
+                </span>
+              </template>
               <div class="cloud-alarm">
                 <el-card style="height: 35vh; width: 100%; margin-bottom: 20px">
                   <div class="cloud-alarm-title">
@@ -104,7 +122,13 @@
                 </el-card>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="安全中心" name="fourth">
+            <el-tab-pane name="fourth">
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><List /></el-icon>
+                  <span>安全中心</span>
+                </span>
+              </template>
               <el-card style="height: 80vh"> 安全中心 </el-card>
             </el-tab-pane>
           </el-tabs>
@@ -117,10 +141,12 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import type { TabsPaneContext } from "element-plus";
+import { Calendar, TrendCharts, Ticket, List } from "@element-plus/icons-vue";
 import WorkbenchTopMenu from "./components/WorkbenchTopMenu.vue";
 import ResourceManagement from "../resourceManagement/index.vue";
+import Overview from "./components/Overview.vue";
 
-const activeName = ref("first");
+const activeName = ref("overview");
 const tableData = [
   {
     date: "2016-05-03",
@@ -171,6 +197,7 @@ onMounted(() => {});
     width: 90vw;
     margin: 0 auto;
     margin-top: 52px;
+    background-color: #eef0f5;
   }
 }
 
@@ -364,25 +391,28 @@ onMounted(() => {});
 
 .workbench-wrap {
   .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
-    border-color: #409eff;
+    border-color: #ffffff;
   }
 }
 .demo-tabs {
   .el-tabs__item:hover {
     color: #409eff;
-    border-color: #409eff;
-    border-bottom-color: #409eff;
   }
 
   .el-tabs__item.is-active {
     color: #409eff;
-    border-color: #409eff;
-    border-bottom-color: #409eff;
   }
 
   .el-tabs__item {
-    font-size: 14px;
+    font-size: 15px;
     color: #fff;
+  }
+  .custom-tabs-label .el-icon {
+    vertical-align: middle;
+  }
+  .custom-tabs-label span {
+    vertical-align: middle;
+    margin-left: 4px;
   }
 }
 </style>
