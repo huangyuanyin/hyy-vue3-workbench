@@ -12,11 +12,6 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/Workbench',
-    component: Layout
-  },
-  {
-    path: '/Workbench',
     name: 'Workbench',
     meta: {
       title: '工作台'
