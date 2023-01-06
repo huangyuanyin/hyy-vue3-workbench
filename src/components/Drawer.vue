@@ -107,138 +107,138 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, computed } from "vue";
-import { ElMessage } from "element-plus";
-import { Grid, Monitor, ArrowRight, Close, Suitcase, Platform, Notebook, Position, TrendCharts } from "@element-plus/icons-vue";
-import { useRouter } from "vue-router";
-import { useAppStore } from "@/store/modules/app";
+import { defineProps, ref, computed } from 'vue'
+import { ElMessage } from 'element-plus'
+import { Grid, Monitor, ArrowRight, Close, Suitcase, Platform, Notebook, Position, TrendCharts } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+import { useAppStore } from '@/store/modules/app'
 
 const props = defineProps({
   drawer: {
     type: Boolean,
-    default: false,
-  },
-});
-const emit = defineEmits(["changeDrawer"]);
+    default: false
+  }
+})
+const emit = defineEmits(['changeDrawer'])
 
-const router = useRouter();
-const store = useAppStore();
-const filter = ref(""); // 搜索
-const height = window.innerHeight - 52 + "px"; // 高度
+const router = useRouter()
+const store = useAppStore()
+const filter = ref('') // 搜索
+const height = window.innerHeight - 52 + 'px' // 高度
 // 测试模块
 const testData = ref([
   {
-    value: "netpts",
-    label: "性能测试",
+    value: 'netpts',
+    label: '性能测试'
   },
   {
-    value: "apitest",
-    label: "接口测试",
+    value: 'apitest',
+    label: '接口测试'
   },
   {
-    value: "Agile",
-    label: "敏捷测试",
+    value: 'Agile',
+    label: '敏捷测试'
   },
   {
-    value: "netapv",
-    label: "APV自动化",
+    value: 'netapv',
+    label: 'APV自动化'
   },
   {
-    value: "netpoc",
-    label: "POC自动化",
-  },
-]);
+    value: 'netpoc',
+    label: 'POC自动化'
+  }
+])
 // 监控与运维服务
 const monitorData = ref([
   {
-    value: "netcmt",
-    label: "信安云网管",
+    value: 'netcmt',
+    label: '信安云网管'
   },
   {
-    value: "netmonitor",
-    label: "监控服务",
+    value: 'netmonitor',
+    label: '监控服务'
   },
   {
-    value: "netcfg",
-    label: "混沌演练平台",
-  },
-]);
+    value: 'netcfg',
+    label: '混沌演练平台'
+  }
+])
 const dataServices = ref([
   {
-    value: "netforum",
-    label: "信安知识库",
+    value: 'netforum',
+    label: '信安知识库'
   },
   {
-    value: "netevaluate",
-    label: "度量分析",
-  },
-]);
+    value: 'netevaluate',
+    label: '度量分析'
+  }
+])
 // 容器与虚拟机服务
 const containerData = ref([
   {
-    value: "container",
-    label: "容器镜像服务",
+    value: 'container',
+    label: '容器镜像服务'
   },
   {
-    value: "container",
-    label: "容器服务",
+    value: 'container',
+    label: '容器服务'
   },
   {
-    value: "vm",
-    label: "虚拟机服务",
-  },
-]);
+    value: 'vm',
+    label: '虚拟机服务'
+  }
+])
 // 安全服务
 const securityData = ref([
   {
-    value: "netpt",
-    label: "渗透测试服务",
+    value: 'netpt',
+    label: '渗透测试服务'
   },
   {
-    value: "netvs",
-    label: "漏洞扫描",
+    value: 'netvs',
+    label: '漏洞扫描'
   },
   {
-    value: "netdos",
-    label: "DDos高防",
-  },
-]);
+    value: 'netdos',
+    label: 'DDos高防'
+  }
+])
 // 测试工具
 const toolData = ref([
   {
-    value: "cert",
-    label: "证书服务",
-  },
-]);
+    value: 'cert',
+    label: '证书服务'
+  }
+])
 // 跳转
 const goTo = (value: any) => {
   ElMessage({
-    type: "warning",
-    message: "暂不支持！！！",
-  });
-};
+    type: 'warning',
+    message: '暂不支持！！！'
+  })
+}
 // 侧边栏响应
 const handleSelect = (value: any) => {
-  let url = "";
-  let console_url = sessionStorage.getItem("CONSOLE_URL") || "http://10.4.150.55:8080/";
-  localStorage.setItem("jwtToken", sessionStorage.getItem("token"));
-  url = console_url + "/" + value;
-  window.location.href = url;
-};
-const direction = ref("ltr");
+  let url = ''
+  let console_url = import.meta.env.VITE_BASE_URL
+  localStorage.setItem('jwtToken', sessionStorage.getItem('token'))
+  url = console_url + '/' + value
+  window.location.href = url
+}
+const direction = ref('ltr')
 const isDrawer = computed({
   get() {
-    return props.drawer;
+    return props.drawer
   },
   set(value) {
-    emit("changeDrawer", value);
-    return value;
-  },
-});
+    emit('changeDrawer', value)
+    return value
+  }
+})
 
 const handleClose = () => {
-  isDrawer.value = false;
-};
+  isDrawer.value = false
+}
 </script>
 
 <style lang="scss" scoped>
@@ -264,7 +264,7 @@ const handleClose = () => {
 
   .span-title {
     font-weight: 800;
-    font-family: "宋体";
+    font-family: '宋体';
   }
 
   .button {
