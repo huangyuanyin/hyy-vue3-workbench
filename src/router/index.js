@@ -1,42 +1,42 @@
-import { createRouter, createWebHashHistory, createWebHistory, } from "vue-router"
-import Layout from "@/views/Layout/index.vue"; // 布局组件 不需要懒加载
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import Layout from '@/views/Layout/index.vue' // 布局组件 不需要懒加载
 
 const routes = [
   {
-    path: "/login",
-    name: "Login",
+    path: '/login',
+    name: 'Login',
     meta: {
-      title: "登录页面",
+      title: '登录页面'
     },
-    component: () => import("@/views/Login/index.vue"),
+    component: () => import('@/views/Login/index.vue')
   },
   {
-    path: "/",
-    redirect: "/Workbench",
-    component: Layout,
+    path: '/',
+    redirect: '/Workbench',
+    component: Layout
   },
   {
-    path: "/Workbench",
-    name: "Workbench",
+    path: '/Workbench',
+    name: 'Workbench',
     meta: {
-      title: "工作台",
+      title: '工作台'
     },
-    component: () => import("@/views/Workbench/index.vue"),
+    component: () => import('@/views/Workbench/index.vue'),
     children: []
   },
   {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
     meta: {
-      title: "404页面",
+      title: '404页面'
     },
-    component: () => import("@/views/exception/404.vue"),
-  },
+    component: () => import('@/views/exception/404.vue')
+  }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(""),
-  routes,
+  history: createWebHashHistory(''),
+  routes
 })
 
 export default router

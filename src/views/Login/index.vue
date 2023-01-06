@@ -1,101 +1,92 @@
 <template>
-  <div class="container">
-    <div class="login-container">
-      <div class="login-left">
-        <div class="top">
-          <div class="title">
-            <span>欢迎使用</span>
-          </div>
-          <div class="desc">
-            <span>信安云测平工作台</span>
-          </div>
+  <div class="login-wrap">
+    <div class="ms-login">
+      <div class="ms-title">信安控制台</div>
+      <el-form :model="form" :rules="formRules" ref="formRef" class="ms-content">
+        <el-form-item prop="username">
+          <el-input v-model="form.username" placeholder="用户名">
+            <template #prefix>
+              <el-icon><Avatar /></el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input type="password" placeholder="密码" v-model="form.password" @keyup.enter="submitForm()">
+            <template #prefix>
+              <el-icon><Key /></el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <div class="login-btn">
+          <el-button type="primary" @click="submitForm()">登录</el-button>
         </div>
-        <div class="bottom">
-          <img :src="working" />
-        </div>
-      </div>
-      <div class="login-right">
-        <Login />
-      </div>
+      </el-form>
     </div>
   </div>
 </template>
-<script>
-import { defineComponent, ref } from "vue";
-import working from "@/assets/working.png";
-import Login from "./components/loginForm.vue";
-export default defineComponent({
-  components: {
-    Login,
-  },
-  setup() {
-    return {
-      working,
-    };
-  },
-});
+
+<script lang="ts" setup>
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { Avatar, Key } from '@element-plus/icons-vue'
+import { useUserStore } from '@/store/modules/user'
+
+const router = useRouter()
+const store = useUserStore()
+const form = reactive({
+  username: '',
+  password: ''
+})
+const formRules = {
+  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+}
+const formRef = ref(null)
+const submitForm = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) return
+    store.Login(form).then(() => {
+      router.push('/')
+    })
+  })
+}
 </script>
 
 <style lang="scss" scoped>
-.container {
+.login-wrap {
   position: relative;
-  background-image: linear-gradient(90deg, #ebebeb, #f5f7f6);
+  width: 100vw;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .login-container {
-    width: 874px;
-    min-width: 874px;
-    height: 78%;
-    min-height: 600px;
-    flex-direction: row;
-    display: flex;
-    justify-content: space-evenly;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: white;
-    box-shadow: 0 0 20px 5px rgba(34, 84, 142, 0.26);
-
-    .login-left {
-      width: 50%;
-      padding: 47px 54px;
-
-      img {
-        width: 100%;
-        height: auto;
-        margin: 0px 20px;
-      }
-
-      .top {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin: 40px 0px;
-
-        .title {
-          font-size: 32px;
-          margin-bottom: 16px;
-        }
-
-        .desc {
-          font-size: 28px;
-          text-align: left;
-          color: rgb(166, 175, 188);
-        }
-      }
-    }
-
-    .login-right {
-      width: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 30px;
-    }
-  }
+  background-image: url(../../assets/login-bg.jpg);
+  background-size: 100%;
+}
+.ms-title {
+  width: 100%;
+  line-height: 50px;
+  text-align: center;
+  font-size: 20px;
+  color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.ms-login {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 350px;
+  margin: -190px 0 0 -175px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+.ms-content {
+  padding: 30px 30px;
+}
+.login-btn {
+  text-align: center;
+}
+.login-btn button {
+  width: 100%;
+  height: 36px;
+  margin-bottom: 10px;
 }
 </style>

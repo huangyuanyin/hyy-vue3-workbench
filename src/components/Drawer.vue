@@ -223,7 +223,6 @@ const handleSelect = (value: any) => {
   let console_url = sessionStorage.getItem("CONSOLE_URL") || "http://10.4.150.55:8080/";
   localStorage.setItem("jwtToken", sessionStorage.getItem("token"));
   url = console_url + "/" + value;
-  console.log("大大", url);
   window.location.href = url;
 };
 const direction = ref("ltr");

@@ -1,34 +1,37 @@
 import { defineStore } from 'pinia'
-import { login } from '@/api/user.ts'
-import jwt_decode from "jwt-decode";
-import { removeToken, setToken } from '../../../utils/auth';
+import { login } from '@/api/user'
+import jwt_decode from 'jwt-decode'
+import { removeToken, setToken } from '@/utils/auth'
 
 interface BaseUserInfo {
-    id: string
-    nickName: string
+  id: string
+  nickName: string
 }
 
 export const useUserStore = defineStore({
-    id: 'user',
-    state: () => ({
-        userInfo: {} as BaseUserInfo,
-        token: '' as string
-    }),
-    getters: {
-        nickName: (state) => state.userInfo.nickName
+  id: 'user',
+  state: () => ({
+    userInfo: {} as BaseUserInfo,
+    token: '' as string
+  }),
+  getters: {
+    nickName: (state) => state.userInfo.nickName
+  },
+  actions: {
+    async Login(loginInfo: { username: string; password: string }) {
+      const { token } = await login(loginInfo)
+      this.userInfo = jwt_decode(token)
+      localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
+      this.token = token
+      setToken(this.token)
+      sessionStorage.setItem('token', this.token)
+      return token
     },
-    actions: {
-        async Login(loginInfo: { username: string; password: string }) {
-            const { token } = await login(loginInfo)
-            this.userInfo = jwt_decode(token);
-            localStorage.setItem("userInfo", JSON.stringify(this.userInfo))
-            this.token = token
-            setToken(this.token)
-            return token
-        },
-        async LoginOut() {
-            await removeToken()
-            localStorage.removeItem("userInfo")
-        }
+    async LoginOut() {
+      await removeToken()
+      localStorage.removeItem('userInfo')
+      localStorage.removeItem('jwtToken')
+      sessionStorage.removeItem('token')
     }
+  }
 })
