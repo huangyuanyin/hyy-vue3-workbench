@@ -6,7 +6,8 @@
       </el-header>
       <el-container>
         <div class="body-wrap">
-          <el-tabs v-model="activeName" class="demo-tabs" type="card" @tab-click="handleClick">
+          <CollapseMenu />
+          <el-tabs v-model="activeName" class="elTab-wrap" type="card" @tab-click="handleClick">
             <el-tab-pane name="overview">
               <template #label>
                 <span class="custom-tabs-label">
@@ -139,42 +140,43 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import type { TabsPaneContext } from "element-plus";
-import { Calendar, TrendCharts, Ticket, List } from "@element-plus/icons-vue";
-import WorkbenchTopMenu from "./components/WorkbenchTopMenu.vue";
-import ResourceManagement from "../resourceManagement/index.vue";
-import Overview from "./components/Overview.vue";
+import { ref, onMounted } from 'vue'
+import type { TabsPaneContext } from 'element-plus'
+import { Calendar, TrendCharts, Ticket, List } from '@element-plus/icons-vue'
+import WorkbenchTopMenu from './components/WorkbenchTopMenu.vue'
+import ResourceManagement from '../resourceManagement/index.vue'
+import Overview from './components/Overview.vue'
+import CollapseMenu from './components/CollapseMenu.vue'
 
-const activeName = ref("overview");
+const activeName = ref('overview')
 const tableData = [
   {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
+    date: '2016-05-03',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: "2016-05-02",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
+    date: '2016-05-02',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: "2016-05-04",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
+    date: '2016-05-04',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: "2016-05-01",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-];
+    date: '2016-05-01',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }
+]
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event);
-};
+  console.log(tab, event)
+}
 
-onMounted(() => {});
+onMounted(() => {})
 </script>
 
 <style lang="scss" scoped>
@@ -202,13 +204,13 @@ onMounted(() => {});
 }
 
 .body-wrap::before {
-  content: "";
+  content: '';
   transition: opacity 0.4s ease-out;
   display: block;
   opacity: 1;
   width: 100%;
   height: 187px;
-  background-image: url("https://cloudcache.tencentcs.com/qcloud/tea/app/overview.b7e9453acd02d3b41e82dcd390be777c.png");
+  background-image: url('https://cloudcache.tencentcs.com/qcloud/tea/app/overview.b7e9453acd02d3b41e82dcd390be777c.png');
   background-size: auto 100%;
   background-repeat: repeat;
   background-position: top;
@@ -394,7 +396,7 @@ onMounted(() => {});
     border-color: #ffffff;
   }
 }
-.demo-tabs {
+.elTab-wrap {
   .el-tabs__item:hover {
     color: #409eff;
   }
