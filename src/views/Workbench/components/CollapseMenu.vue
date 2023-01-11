@@ -221,25 +221,35 @@ const goTo = (value: any) => {
   left: 0px;
   height: calc(100vh - 50px);
   z-index: 110;
-  min-width: 68px;
+  min-width: 47px;
   transition: width 0.25s;
   -webkit-transition: width 0.25s;
   -moz-transition: width 0.25s;
   -webkit-transition: width 0.25s;
   -o-transition: width 0.25s;
+  --el-menu-base-level-padding: 10px;
   .mainMenu {
-    border-bottom: 1px solid #dfe1e6;
     position: relative;
     padding-right: 0px;
     .arrowRight {
       margin-left: 10px;
       font-size: 14px;
     }
+    &:after {
+      content: ' ';
+      width: 82%;
+      height: 1px;
+      background: #dfe1e6;
+      position: absolute;
+      bottom: -0.1px;
+      left: 50%;
+      transform: translateX(-50%); //居中处理
+    }
   }
 }
 .right-menu {
   position: absolute;
-  left: 158px;
+  left: 148px;
   top: 50px;
   z-index: 100;
   min-width: 1000px;
