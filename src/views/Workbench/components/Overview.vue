@@ -20,31 +20,31 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from 'vue'
 
 const buttonList = [
-  { name: "性能压测", id: "1" },
-  { name: "接口测试", id: "1" },
-  { name: "敏捷测试", id: "1" },
-  { name: "信安知识库", id: "1" },
-  { name: "信安云王管", id: "1" },
-  { name: "APV自动化", id: "1" },
-  { name: "POC测试", id: "1" },
-  { name: "待添加1", id: "1" },
-  { name: "待添加2", id: "1" },
-];
+  { name: '性能压测', id: '1' },
+  { name: '接口测试', id: '1' },
+  { name: '敏捷测试', id: '1' },
+  { name: '信安知识库', id: '1' },
+  { name: '信安云王管', id: '1' },
+  { name: 'APV自动化', id: '1' },
+  { name: 'POC测试', id: '1' },
+  { name: '待添加1', id: '1' },
+  { name: '待添加2', id: '1' }
+]
 
 const visitedList = [
-  { name: "性能压测", id: "1" },
-  { name: "接口测试", id: "1" },
-  { name: "敏捷测试", id: "1" },
-  { name: "信安知识库", id: "1" },
-  { name: "信安云王管", id: "1" },
-  { name: "APV自动化", id: "1" },
-  { name: "POC测试", id: "1" },
-  { name: "待添加1", id: "1" },
-  { name: "待添加2", id: "1" },
-];
+  { name: '性能压测', id: '1' },
+  { name: '接口测试', id: '1' },
+  { name: '敏捷测试', id: '1' },
+  { name: '信安知识库', id: '1' },
+  { name: '信安云王管', id: '1' },
+  { name: 'APV自动化', id: '1' },
+  { name: 'POC测试', id: '1' },
+  { name: '待添加1', id: '1' },
+  { name: '待添加2', id: '1' }
+]
 </script>
 
 <style lang="scss" scoped>
@@ -54,9 +54,14 @@ const visitedList = [
     align-items: center;
     .title {
       font-size: 14px;
+      font-family: '微软雅黑';
       color: #252b3a;
       font-weight: 700;
-      margin-right: 5px;
+    }
+    .el-button {
+      font-family: '微软雅黑';
+      color: #526ecc;
+      padding: 13px;
     }
   }
   .my-navigation-buttonList {
@@ -64,6 +69,8 @@ const visitedList = [
     min-height: 40px;
     overflow-y: auto;
     .el-button {
+      font-size: 12px;
+      font-family: '微软雅黑';
       color: #252b3a;
       background-color: #e9edfa;
       height: 38px;
@@ -96,6 +103,8 @@ const visitedList = [
       font-weight: 700;
     }
     .el-button {
+      font-size: 12px;
+      font-family: '微软雅黑';
       color: #252b3a;
       background-color: #e9edfa;
       height: 28px;

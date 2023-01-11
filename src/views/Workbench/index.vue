@@ -130,7 +130,7 @@
                   <span>安全中心</span>
                 </span>
               </template>
-              <el-card style="height: 80vh"> 安全中心 </el-card>
+              <el-card style="height: 78vh"> 安全中心 </el-card>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -196,10 +196,11 @@ onMounted(() => {})
   }
 
   .body-wrap {
-    width: 90vw;
-    margin: 0 auto;
+    width: 100vw;
     margin-top: 52px;
     background-color: #eef0f5;
+    padding: 15px;
+    margin-left: 47px;
   }
 }
 

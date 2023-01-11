@@ -128,7 +128,7 @@ onMounted(() => {})
 
     span {
       line-height: 50px;
-      color: #c1c6c8;
+      color: #fff;
       text-align: center;
       font-size: 16px;
       font-weight: 600;

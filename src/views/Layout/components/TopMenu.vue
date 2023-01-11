@@ -54,61 +54,52 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted } from "vue";
-import logo from "@/assets/logo.png";
-import user from "@/assets/user.png";
-import { useUserStore } from "@/store/modules/user";
-import {
-  HomeFilled,
-  ArrowDown,
-  QuestionFilled,
-  BellFilled,
-  Search,
-  Operation,
-  CloseBold,
-} from "@element-plus/icons-vue";
-import Drawer from "@/components/Drawer.vue";
-import { useRouter } from "vue-router";
+import { defineComponent, reactive, ref, onMounted } from 'vue'
+import logo from '@/assets/logo.png'
+import user from '@/assets/user.png'
+import { useUserStore } from '@/store/modules/user'
+import { HomeFilled, ArrowDown, QuestionFilled, BellFilled, Search, Operation, CloseBold } from '@element-plus/icons-vue'
+import Drawer from '@/components/Drawer.vue'
+import { useRouter } from 'vue-router'
 export default defineComponent({
   components: {
     ArrowDown,
     QuestionFilled,
     BellFilled,
-    Drawer,
+    Drawer
   },
   setup() {
     const data = reactive({
-      username: JSON.parse(localStorage.getItem("userInfo"))?.nickname,
-      button: [{ name: "个人中心" }, { name: "退出登录" }],
-    });
-    const router = useRouter();
-    const store = useUserStore();
-    const input = ref("");
-    const activeIndex = ref("1");
-    const drawer = ref(false);
+      username: JSON.parse(localStorage.getItem('userInfo'))?.nickname,
+      button: [{ name: '个人中心' }, { name: '退出登录' }]
+    })
+    const router = useRouter()
+    const store = useUserStore()
+    const input = ref('')
+    const activeIndex = ref('1')
+    const drawer = ref(false)
     const handleSelect = (key: string, keyPath: string[]) => {
-      console.log(key, keyPath);
-    };
+      console.log(key, keyPath)
+    }
     const openDrawer = (val) => {
-      val === "open" ? (drawer.value = true) : (drawer.value = false);
-    };
+      val === 'open' ? (drawer.value = true) : (drawer.value = false)
+    }
     const toLink = (index) => {
       switch (index) {
         case 0:
-          console.log("index", index);
-          break;
+          console.log('index', index)
+          break
         case 1:
-          store.LoginOut();
-          router.push("/login");
-          break;
+          store.LoginOut()
+          router.push('/login')
+          break
       }
-    };
-    const toWork = () => { };
+    }
+    const toWork = () => {}
     const changeDrawer = (drawer) => {
       openDrawer(drawer)
     }
-    onMounted(() => {
-    });
+    onMounted(() => {})
     return {
       store,
       router,
@@ -127,9 +118,9 @@ export default defineComponent({
       toLink,
       toWork,
       changeDrawer
-    };
-  },
-});
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

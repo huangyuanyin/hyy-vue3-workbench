@@ -4,32 +4,32 @@
       <el-icon><Grid /></el-icon>
       <template #title>
         <span>产品与服务</span>
-        <el-icon class="arrowRight"><ArrowRight /></el-icon>
+        <el-icon class="arrowRight"><CaretRight /></el-icon>
       </template>
     </el-menu-item>
     <el-menu-item index="netpts">
       <el-icon><Monitor /></el-icon>
-      <template #title>性能压测</template>
+      <template #title>性能测试服务 PTS</template>
     </el-menu-item>
     <el-menu-item index="apitest">
       <el-icon><Suitcase /></el-icon>
-      <template #title>接口测试</template>
+      <template #title>接口测试 ApiTest </template>
     </el-menu-item>
     <el-menu-item index="Agile">
       <el-icon><Position /></el-icon>
-      <template #title>敏捷测试</template>
+      <template #title>敏捷测试 Agile</template>
     </el-menu-item>
     <el-menu-item index="netforum">
       <el-icon><Notebook /></el-icon>
-      <template #title>信安知识库</template>
+      <template #title>信安知识库 KMT</template>
     </el-menu-item>
     <el-menu-item index="netcmt">
-      <el-icon><Platform /></el-icon>
-      <template #title>信安云网管</template>
+      <el-icon><MapLocation /></el-icon>
+      <template #title>信安云网管 CMT</template>
     </el-menu-item>
     <el-menu-item index="netapv">
-      <el-icon><TrendCharts /></el-icon>
-      <template #title>APV自动化</template>
+      <el-icon><Film /></el-icon>
+      <template #title>APV自动化 APV</template>
     </el-menu-item>
   </el-menu>
   <el-card v-show="isShowCard" body-style="{ padding: '60px' }" :style="{ height: height }" class="right-menu">
@@ -83,7 +83,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Grid, Monitor, ArrowRight, Close, Suitcase, Platform, Notebook, Position, TrendCharts } from '@element-plus/icons-vue'
+import { Grid, Monitor, CaretRight, ArrowRight, Close, Suitcase, MapLocation, Notebook, Position, Film } from '@element-plus/icons-vue'
 
 const isCollapse = ref(true)
 const isShowCard = ref(false)
@@ -227,12 +227,19 @@ const goTo = (value: any) => {
   -moz-transition: width 0.25s;
   -webkit-transition: width 0.25s;
   -o-transition: width 0.25s;
-  --el-menu-base-level-padding: 10px;
+  --el-menu-base-level-padding: 10px !important;
+  .el-menu-item {
+    font-size: 12px !important;
+    font-family: '微软雅黑';
+  }
+  li {
+    display: flex;
+  }
   .mainMenu {
     position: relative;
     padding-right: 0px;
     .arrowRight {
-      margin-left: 10px;
+      margin-left: 25px;
       font-size: 14px;
     }
     &:after {
@@ -249,10 +256,12 @@ const goTo = (value: any) => {
 }
 .right-menu {
   position: absolute;
-  left: 148px;
+  left: 138px;
   top: 50px;
   z-index: 100;
   min-width: 1000px;
+  font-size: 12px !important;
+  font-family: '微软雅黑';
   :deep(.el-card__header) {
     height: 55px;
     display: flex;

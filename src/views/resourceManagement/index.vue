@@ -1,12 +1,10 @@
 <template>
-  <el-card style="height: 80vh" class="resourceManagement-wrap">
+  <el-card style="height: 78vh" class="resourceManagement-wrap">
     <div class="resource-title">
       <span class="title">我的资源</span>
       <span class="cloud-regionName">【全局】</span>
     </div>
-    <div class="resources-view-resources-tip">
-      部分资源可能会由于未接入服务，而无法在此模块中展示。
-    </div>
+    <div class="resources-view-resources-tip">部分资源可能会由于未接入服务，而无法在此模块中展示。</div>
     <el-tabs type="border-card" class="resourceManagement-card">
       <el-tab-pane label="资源监控">
         <ResourceMonitor />
@@ -19,9 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import ResourceMonitor from "./components/resourceMonitor.vue";
-import ServerMonitor from "./components/serverMonitor.vue";
+import { ref } from 'vue'
+import ResourceMonitor from './components/resourceMonitor.vue'
+import ServerMonitor from './components/serverMonitor.vue'
 </script>
 
 <style lang="scss" scoped>
