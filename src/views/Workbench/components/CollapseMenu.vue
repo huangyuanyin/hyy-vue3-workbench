@@ -1,6 +1,6 @@
 <template>
   <el-menu default-active="" class="elMenu-wrap" :collapse="isCollapse && !isShowCard" @select="handleSelect" @mouseenter="handleOpen" @mouseleave="handleClose">
-    <el-menu-item index="prodandserver" class="mainMenu" @mouseenter.native="openMenu">
+    <el-menu-item index="prodandserver" class="mainMenu" @mouseenter.native="openMenu" :disabled="true">
       <el-icon><Grid /></el-icon>
       <template #title>
         <span>产品与服务</span>
@@ -8,28 +8,36 @@
       </template>
     </el-menu-item>
     <el-menu-item index="netpts">
-      <el-icon><Monitor /></el-icon>
+      <svg-icon iconName="icon-ptsxingnengceshiPTS" className="icon"></svg-icon>
       <template #title>性能测试服务 PTS</template>
     </el-menu-item>
     <el-menu-item index="apitest">
-      <el-icon><Suitcase /></el-icon>
+      <svg-icon iconName="icon-jiekouzhushou" className="icon"></svg-icon>
       <template #title>接口测试 ApiTest </template>
     </el-menu-item>
     <el-menu-item index="Agile">
-      <el-icon><Position /></el-icon>
+      <svg-icon iconName="icon-minjiekaifa" className="icon"></svg-icon>
       <template #title>敏捷测试 Agile</template>
     </el-menu-item>
     <el-menu-item index="netforum">
-      <el-icon><Notebook /></el-icon>
+      <svg-icon iconName="icon-zhishiku" className="icon"></svg-icon>
       <template #title>信安知识库 KMT</template>
     </el-menu-item>
     <el-menu-item index="netcmt">
-      <el-icon><MapLocation /></el-icon>
+      <svg-icon iconName="icon-a-cmnyunwangguan" className="icon"></svg-icon>
       <template #title>信安云网管 CMT</template>
     </el-menu-item>
     <el-menu-item index="netapv">
-      <el-icon><Film /></el-icon>
+      <svg-icon iconName="icon-yingxiaozidonghua" className="icon"></svg-icon>
       <template #title>APV自动化 APV</template>
+    </el-menu-item>
+    <el-menu-item index="netcrypto">
+      <svg-icon iconName="icon-mima" className="icon"></svg-icon>
+      <template #title>密码服务 Crypto</template>
+    </el-menu-item>
+    <el-menu-item index="netspace">
+      <svg-icon iconName="icon-zhishiku2" className="icon"></svg-icon>
+      <template #title>华耀知识库 Space</template>
     </el-menu-item>
   </el-menu>
   <el-card v-show="isShowCard" body-style="{ padding: '60px' }" :style="{ height: height }" class="right-menu">
@@ -198,6 +206,10 @@ const handleCloseCard = () => {
 
 // 侧边栏响应
 const handleSelect = (value: any) => {
+  if (value === 'netspace') {
+    window.location.href = 'http://10.3.0.160:8090/'
+    return
+  }
   let url = ''
   let console_url = import.meta.env.VITE_BASE_URL
   localStorage.setItem('jwtToken', sessionStorage.getItem('token'))
@@ -232,14 +244,28 @@ const goTo = (value: any) => {
     font-size: 12px !important;
     font-family: '微软雅黑';
   }
+  .el-menu-item.is-disabled {
+    opacity: 1;
+  }
+  .el-menu-item.is-disabled:hover {
+    cursor: pointer;
+  }
   li {
     display: flex;
+  }
+  .icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 5px;
   }
   .mainMenu {
     position: relative;
     padding-right: 0px;
+    .el-icon {
+      color: #606266;
+    }
     .arrowRight {
-      margin-left: 25px;
+      margin-left: 75px;
       font-size: 14px;
     }
     &:after {
@@ -256,7 +282,7 @@ const goTo = (value: any) => {
 }
 .right-menu {
   position: absolute;
-  left: 138px;
+  left: 203px;
   top: 50px;
   z-index: 100;
   min-width: 1000px;
