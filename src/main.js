@@ -1,21 +1,25 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router/index";
-import { createPinia } from "pinia";
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router/index'
+import { createPinia } from 'pinia'
 
-import "element-plus/theme-chalk/el-message.css";
-import "xterm/dist/xterm.css";
+import 'element-plus/theme-chalk/el-message.css'
+import 'xterm/dist/xterm.css'
 
-import echarts from "./utils/echarts";
+import echarts from './utils/echarts'
 
-// createApp(App).mount('#app')
-const pinia = createPinia();
-const app = createApp(App);
+import SvgIcon from '@/components/SvgIcon.vue'
+import './assets/iconfont/iconfont.js'
 
-app.config.globalProperties.$echarts = echarts;
+const pinia = createPinia()
+const app = createApp(App)
 
-app.use(router);
-app.use(pinia);
-import "./permission";
+app.config.globalProperties.$echarts = echarts
 
-app.mount("#app");
+app.use(router)
+app.use(pinia)
+app.component('SvgIcon', SvgIcon)
+
+import './permission'
+
+app.mount('#app')
