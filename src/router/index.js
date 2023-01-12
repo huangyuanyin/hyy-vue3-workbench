@@ -1,5 +1,4 @@
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import Layout from '@/views/Layout/index.vue' // 布局组件 不需要懒加载
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
