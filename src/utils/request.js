@@ -22,6 +22,9 @@ service.interceptors.request.use(
       case 'Login':
         config.url = import.meta.env.VITE_BASE_LOGIN_URL + config.url
         break
+      case 'NetDevOps':
+        config.url = import.meta.env.VITE_BASE_URL + config.url
+        break
     }
     // 请求拦截进来 显示loading效果
     return config
@@ -47,9 +50,10 @@ service.interceptors.response.use(
     return response.data
   },
   function (error) {
+    console.log(`output->error`, error)
     // 对响应错误做点什么
     ElMessage({
-      message: error.data?.msg || '请求失败',
+      message: error.response.data.name || '请求失败',
       type: 'error',
       duration: 1000
     })

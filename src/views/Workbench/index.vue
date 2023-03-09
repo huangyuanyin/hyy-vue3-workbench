@@ -1,4 +1,5 @@
 <template>
+  <CollapseMenu />
   <div class="workbench-wrap">
     <el-container>
       <el-header>
@@ -6,7 +7,6 @@
       </el-header>
       <el-container>
         <div class="body-wrap">
-          <CollapseMenu />
           <el-tabs v-model="activeName" class="elTab-wrap" type="card" @tab-click="handleClick">
             <el-tab-pane name="overview">
               <template #label>
@@ -132,6 +132,17 @@
               </template>
               <el-card style="height: 78vh"> 安全中心 </el-card>
             </el-tab-pane>
+            <el-tab-pane name="navigationManage" v-if="username === 'admin'">
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><Promotion /></el-icon>
+                  <span>导航管理</span>
+                </span>
+              </template>
+              <!-- <el-card style="height: 78vh"> -->
+              <NavigationManagement />
+              <!-- </el-card> -->
+            </el-tab-pane>
           </el-tabs>
         </div>
       </el-container>
@@ -142,41 +153,23 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
-import { Calendar, TrendCharts, Ticket, List } from '@element-plus/icons-vue'
+import { Calendar, TrendCharts, Ticket, List, Promotion } from '@element-plus/icons-vue'
 import WorkbenchTopMenu from './components/WorkbenchTopMenu.vue'
 import ResourceManagement from '../resourceManagement/index.vue'
 import Overview from './components/Overview.vue'
-import CollapseMenu from './components/CollapseMenu.vue'
+import CollapseMenu from '@/components/CollapseMenu.vue'
+import NavigationManagement from '../navigationManagement/index.vue'
 
+const username = JSON.parse(localStorage.getItem('userInfo')).role
 const activeName = ref('overview')
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }
-]
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
 
-onMounted(() => {})
+onMounted(() => {
+  console.log(`output->username`, username)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -184,17 +177,14 @@ onMounted(() => {})
   width: 100vw;
   height: 100vh;
   background-color: #f2f2f2;
-
   .el-header {
     z-index: 200;
     --el-header-padding: 0 0px;
-    --el-header-height: 50px;
+    height: 50px;
   }
-
   .el-container {
-    height: 100vh;
+    height: calc(100vh - 50px);
   }
-
   .body-wrap {
     width: 100vw;
     margin-top: 52px;
@@ -203,7 +193,6 @@ onMounted(() => {})
     margin-left: 47px;
   }
 }
-
 .body-wrap::before {
   content: '';
   transition: opacity 0.4s ease-out;
@@ -220,7 +209,6 @@ onMounted(() => {})
   top: 50px;
   left: 0;
 }
-
 .cloud-alarm {
   .cloud-alarm-title {
     font-size: 18px;
@@ -229,46 +217,37 @@ onMounted(() => {})
     margin-right: 5px;
     margin-bottom: 30px;
   }
-
   .cloud-alarm-body {
     display: flex;
     padding: 0 40px;
-
     .cloud-alarm-left {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 40%;
-
       .percentage-value {
         display: block;
         margin-top: 10px;
         font-size: 40px;
         color: #67c23a;
       }
-
       .percentage-label {
         margin-top: 15px;
         font-size: 14px;
       }
-
       .percentage-tip {
         font-size: 12px;
       }
     }
-
     .cloud-alarm-right {
       width: 60%;
-
       .cloud-alarm-top {
         display: flex;
-
         .item-div {
           width: 33%;
           border-left: 1px dashed #d1d6e4;
           height: 52px;
           padding: 0 10px;
-
           .number {
             font-size: 24px;
             color: #252b3a;
@@ -278,7 +257,6 @@ onMounted(() => {})
             margin-bottom: 8px;
             display: inline-table;
           }
-
           .text {
             font-size: 12px;
             color: #575d6c;
@@ -286,45 +264,38 @@ onMounted(() => {})
           }
         }
       }
-
       .suggest-label {
         font-size: 14px;
         color: #252b3a;
         margin: 25px 0;
         height: 40px;
       }
-
       .btn-div {
         font-size: 12px;
       }
     }
   }
 }
-
 .OperationandMaintenanceManagement {
   display: flex;
   justify-content: space-between;
-
   .operationan-title {
     font-size: 18px;
     color: #252b3a;
     font-weight: 800;
     margin-right: 5px;
     margin-bottom: 30px;
-
     .operationan-regionName {
       font-size: 14px;
       line-height: 20px;
       color: #8a8e99;
     }
   }
-
   .operationan-items {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     padding: 0 20px;
-
     .operationan-item {
       display: flex;
       justify-content: space-between;
@@ -338,14 +309,12 @@ onMounted(() => {})
       border-bottom: 1px dashed #dfe1e6;
     }
   }
-
   .esc-wrap {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     height: 150px;
     padding: 0 20px;
-
     .cpu-item {
       display: flex;
       flex-direction: column;
@@ -357,13 +326,11 @@ onMounted(() => {})
       border-radius: 2px;
       height: 40px;
     }
-
     .cpu-item-title {
       display: flex;
       justify-content: space-between;
       // margin-bottom: 5px;
     }
-
     .ecs-target-item {
       display: flex;
       justify-content: space-between;
@@ -372,7 +339,6 @@ onMounted(() => {})
       height: 40px;
       // margin-top: 15px;
       font-size: 14px;
-
       .line {
         height: 0;
         width: 100%;
