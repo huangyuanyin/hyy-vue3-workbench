@@ -1,7 +1,7 @@
 <template>
   <div class="Overview-wrap">
     <div class="wrap-left">
-      <el-card style="min-height: 30vh">
+      <el-card style="min-height: 35vh">
         <div class="overview-title">
           <span class="title">我的导航</span>
           <!-- <el-tooltip class="box-item" effect="dark" content="您可以通过设置左侧服务列表导航改变我的导航的内容和顺序" placement="right-start">
@@ -9,20 +9,26 @@
           </el-tooltip> -->
         </div>
         <span class="subtitle">最近访问</span>
-        <div class="my-navigation-buttonList">
+        <div class="my-navigation-favoriteList">
           <div class="noData" v-if="visitedList.length === 0">暂无最近访问</div>
           <div style="display: flex; justify-content: flex-start; flex-wrap: wrap; width: 100%">
-            <el-button class="button-items" v-for="(item, index) in visitedList" :key="'visitedList' + index" plain style="padding: 10px">
+            <el-button class="button-items" v-for="(item, index) in visitedList" :key="'visitedList' + index" plain style="padding: 10px" @click="toLink(item)">
               {{ item.name }}
             </el-button>
           </div>
         </div>
         <div class="recentVisit-line"></div>
         <span class="subtitle" style="display: inline-block">自定义快捷入口</span>
-        <div class="my-navigation-buttonList">
-          <el-button class="button-items" v-for="(item, index) in buttonList" :key="'buttonList' + index" plain>
-            {{ item.name }}
-            <el-icon @click="removeFavorite(item)"><Close /></el-icon>
+        <div class="my-navigation-favoriteList">
+          <el-button
+            class="button-items"
+            v-for="(item, index) in favoriteList"
+            :key="'favoriteList' + index"
+            plain
+            @click="toLink(item.provider && item.provider !== null ? item.provider : item)"
+          >
+            {{ item.provider && item.provider !== null ? item.provider.name : item.name }}
+            <el-icon @click.stop="removeFavorite(item)"><Close /></el-icon>
           </el-button>
           <el-popover placement="bottom" :width="400" trigger="click">
             <template #reference>
@@ -34,7 +40,7 @@
             </el-tabs>
             <el-input v-if="activeName === 'first'" v-model="inputSearch" class="w-50 m-2" placeholder="请输入关键词搜索服务" :suffix-icon="Search" />
             <div v-if="activeName === 'first'" class="service-wrap">
-              <div class="service-item-wrap" v-for="(item, index) in serviceList" :key="'serviceList' + index" @click="addService(item)">
+              <div class="service-item-wrap" v-for="(item, index) in serviceList" :key="'serviceList' + index" @click="changeFavorite(item)">
                 <img v-if="item.isShow" src="https://res.hc-cdn.com/ibiza-home-obsflow/23.2.0.20230228112535/hws/solid-star.9df8f5a727ab994d.svg" alt="" />
                 <img v-else src="https://res.hc-cdn.com/ibiza-home-obsflow/23.2.0.20230228112535/hws/hollow-star.5b7e2e069a591697.svg" alt="" />
                 <div>{{ item.name }}</div>
@@ -52,6 +58,55 @@
               </el-form-item>
             </el-form>
           </el-popover>
+        </div>
+      </el-card>
+      <el-card style="max-height: 40vh; margin-top: 15px">
+        <div class="overview-title">
+          <span class="title">信安产品推荐</span>
+        </div>
+        <div class="XinAnProduct-wrap">
+          <div class="XinAnProduct-content">
+            <img src="/src/assets/favicon.ico" alt="" />
+            <div class="item">
+              <span class="title">云·速成网站</span>
+              <span class="value">会打字就能建网站，一天上线</span>
+            </div>
+          </div>
+          <div class="XinAnProduct-content">
+            <img src="/src/assets/favicon.ico" alt="" />
+            <div class="item">
+              <span class="title">云采销</span>
+              <span class="value">帮助企业精准获客并高效管理销售流程</span>
+            </div>
+          </div>
+          <div class="XinAnProduct-content">
+            <img src="/src/assets/favicon.ico" alt="" />
+            <div class="item">
+              <span class="title">文字识别</span>
+              <span class="value">识别图片中的文字信息转换为可编辑文本</span>
+            </div>
+          </div>
+          <div class="XinAnProduct-content">
+            <img src="/src/assets/favicon.ico" alt="" />
+            <div class="item">
+              <span class="title">企业上云必备</span>
+              <span class="value">云上网站标准化部署相关产品推荐</span>
+            </div>
+          </div>
+          <div class="XinAnProduct-content">
+            <img src="/src/assets/favicon.ico" alt="" />
+            <div class="item">
+              <span class="title">云原生数据仓库AnalyticDB</span>
+              <span class="value">新一代云原生数据仓库</span>
+            </div>
+          </div>
+          <div class="XinAnProduct-content">
+            <img src="/src/assets/favicon.ico" alt="" />
+            <div class="item">
+              <span class="title">云·速成网站</span>
+              <span class="value">会打字就能建网站，一天上线</span>
+            </div>
+          </div>
         </div>
       </el-card>
     </div>
@@ -146,7 +201,7 @@ import { ref, reactive, onMounted } from 'vue'
 import user from '@/assets/user.png'
 import type { TabsPaneContext } from 'element-plus'
 import { Search, Close } from '@element-plus/icons-vue'
-import { getProductApi, getFavoriteApi, getAddProductApi, addFavoriteApi, removeFavoriteApi } from '@/api/navigationManageAPI'
+import { getProductApi, getFavoriteApi, getAddProductApi, addFavoriteApi, removeFavoriteApi, getProductCustomizeApi, getRemoveProductApi } from '@/api/navigationManageAPI'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 
@@ -165,33 +220,41 @@ const formInlineRules = reactive<FormRules>({
   name: [{ required: true, message: '请输入入口名称', trigger: 'blur' }],
   links: [{ required: true, message: '请输入入口链接', trigger: 'blur' }]
 })
-const serviceList = ref([])
-const buttonList = ref([])
-const visitedList = [
-  { name: '性能压测', id: '1' },
-  { name: '接口测试', id: '1' },
-  { name: '敏捷测试', id: '1' },
-  { name: '信安知识库', id: '1' },
-  { name: '信安云王管', id: '1' },
-  { name: 'APV自动化', id: '1' }
-]
+const serviceList = ref([]) // 云服务全部列表
+const favoriteList = ref([]) // 收藏入口列表
+const productEntranceList = ref([]) // 云服务入口列表
+const customizeEntranceList = ref([]) // 自定义入口列表
+const visitedList = ref(localStorage.getItem('recentLinks') ? JSON.parse(localStorage.getItem('recentLinks')) : [])
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {}
 
-const changeDocs = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
+const changeDocs = (tab: TabsPaneContext, event: Event) => {}
 
 const openPopver = () => {
   activeName.value = 'first'
+  let arr = []
+  favoriteList.value.forEach((item) => {
+    if (item.provider) {
+      arr.push(item)
+    }
+  })
+  // favoriteList 和 serviceList 对比，如果有相同的，就把isShow设置为true
+  arr.forEach((item) => {
+    serviceList.value.forEach((item2) => {
+      if (item.provider.name === item2.name) {
+        item2.isShow = true
+      }
+    })
+  })
+  console.log('console.log(serviceList.value)', favoriteList.value, arr, serviceList.value)
 }
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
+      if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
       addProduct(formInline)
-      console.log('submit!')
     }
   })
 }
@@ -201,39 +264,76 @@ const addProduct = async (params) => {
   if (res.code === 1000) {
     ElMessage.success('添加成功！')
     formInlineRef.value?.resetFields()
-    getFavorite()
+    sumList()
   }
 }
 
 const getProduct = async () => {
   const res = await getProductApi()
   if (res.code === 1000) {
-    serviceList.value = res.data || []
+    serviceList.value = res.data.filter((item) => item.is_customize !== true) || []
+    // 遍历serviceList 和 favoriteList 对比，如果有相同的，就把isShow设置为true
     serviceList.value.forEach((item) => {
-      item.isShow = false
+      favoriteList.value.forEach((item2) => {
+        if (item.name === item2.name) {
+          item.isShow = true
+        } else {
+          item.isShow = false
+        }
+      })
     })
   }
 }
 
+// 获取自定义入口
+const getProductCustomize = async () => {
+  const params = {
+    is_customize: 'True',
+    creator: JSON.parse(localStorage.getItem('userInfo') || '{}').username
+  }
+  const res = await getProductCustomizeApi(params)
+  if (res.code === 1000) {
+    customizeEntranceList.value = res.data || []
+  }
+}
+
 const getFavorite = async () => {
+  productEntranceList.value = []
   const res = await getFavoriteApi({ user: JSON.parse(localStorage.getItem('userInfo') || '{}').username })
   if (res.code === 1000) {
-    buttonList.value = res.data || []
+    res.data.map((item) => {
+      item.provider === null ? '' : productEntranceList.value.push(item)
+    }) || []
   }
 }
 
-const removeFavorite = async (item) => {
-  const res = await removeFavoriteApi(item.id)
+// 移除入口
+const removeFavorite = async (val) => {
+  val.is_customize === true ? getRemoveProduct(val.id) : getRemoveFavorite(val.id)
+}
+
+// 产品服务 - 移除
+const getRemoveProduct = async (id) => {
+  const res = await getRemoveProductApi(id)
   if (res.code === 1000) {
     ElMessage.success('移除成功！')
-    getFavorite()
+    sumList()
   }
 }
 
-// 点击添加云服务，切换显示隐藏
+// 自定义入口 - 删除
+const getRemoveFavorite = async (id) => {
+  const res = await removeFavoriteApi(id)
+  if (res.code === 1000) {
+    ElMessage.success('移除成功！')
+    sumList()
+  }
+}
+
+// 添加云服务
 const addService = async (val) => {
   const params = {
-    creator: JSON.parse(localStorage.getItem('userInfo') || '{}').username,
+    user: JSON.parse(localStorage.getItem('userInfo') || '{}').username,
     provider: val.id
   }
   const res = await addFavoriteApi(params)
@@ -244,14 +344,42 @@ const addService = async (val) => {
         item.isShow = !item.isShow
       }
     })
-    getFavorite()
+    sumList()
   }
-  console.log(`output->`, serviceList.value)
 }
 
-onMounted(() => {
-  getProduct()
-  getFavorite()
+const sumList = async () => {
+  await getProductCustomize()
+  await getFavorite()
+  favoriteList.value = [].concat(customizeEntranceList.value, productEntranceList.value)
+}
+
+// 跳转链接
+const toLink = (val) => {
+  visitedList.value.unshift({ name: val.name, links: val.links })
+  visitedList.value = visitedList.value
+    .reduce((cur, next) => {
+      const index = cur.findIndex((item) => item.name === next.name)
+      if (index === -1) {
+        cur.push(next)
+      }
+      return cur
+    }, [])
+    .slice(0, 12)
+  localStorage.setItem('recentLinks', JSON.stringify(visitedList.value))
+  window.location.href = val.links
+}
+
+// 点击添加或删除云服务，并切换显示隐藏
+const changeFavorite = async (val) => {
+  if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
+  // val.isShow === true ? removeFavorite(val) : addService(val)
+  val.isShow === true ? '' : addService(val)
+}
+
+onMounted(async () => {
+  await sumList()
+  await getProduct()
 })
 </script>
 
@@ -279,7 +407,7 @@ onMounted(() => {
         padding: 13px;
       }
     }
-    .my-navigation-buttonList {
+    .my-navigation-favoriteList {
       height: calc(100% - 67px);
       min-height: 40px;
       overflow-y: auto;
@@ -298,14 +426,18 @@ onMounted(() => {
         color: #252b3a;
         background-color: #e9edfa;
         height: 38px;
-        min-width: 160px;
-        width: 18%;
+        min-width: 130px;
+        width: 15%;
         margin: 20px 20px 0 0;
         justify-content: flex-start;
         :deep(span) {
           width: 100%;
           display: flex;
           justify-content: space-between;
+        }
+        .el-icon {
+          width: 2em;
+          height: 2em;
         }
       }
       .button-items:hover {
@@ -317,7 +449,7 @@ onMounted(() => {
         font-family: '微软雅黑';
         height: 38px;
         min-width: 160px;
-        width: 18%;
+        width: 15%;
         margin: 20px 20px 0 0;
         justify-content: flex-start;
       }
@@ -529,6 +661,55 @@ onMounted(() => {
       height: 16px;
       width: 18px;
       margin-right: 5px;
+    }
+  }
+}
+.XinAnProduct-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  .XinAnProduct-content {
+    width: 33%;
+    display: flex;
+    align-items: center;
+    margin: 8px 0 40px 0;
+    margin-bottom: 40px;
+    cursor: pointer;
+    img {
+      margin-top: 2px;
+      height: 82px;
+      width: 82px;
+      margin-right: 5px;
+    }
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-left: 10px;
+    }
+    .span {
+      display: inline-block;
+    }
+    .title {
+      margin-bottom: 15px;
+      height: 22px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #333;
+      line-height: 22px;
+    }
+
+    .value {
+      height: 18px;
+      font-size: 12px;
+      line-height: 18px;
+      color: #666;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-decoration: none !important;
     }
   }
 }

@@ -19,12 +19,22 @@ export function getAddCategoryApi(params: any) {
   })
 }
 
-// 产品服务 - 获取
+// 产品服务 - 获取（全部）
 export function getProductApi() {
   return request({
     url: '/product/provider/',
     method: 'Get',
     urlType: 'NetDevOps'
+  })
+}
+
+// 产品服务 - 获取（自定义）
+export function getProductCustomizeApi(params) {
+  return request({
+    url: '/product/provider/',
+    method: 'Get',
+    urlType: 'NetDevOps',
+    params
   })
 }
 
@@ -35,6 +45,15 @@ export function getAddProductApi(params) {
     method: 'POST',
     urlType: 'NetDevOps',
     data: params
+  })
+}
+
+// 产品服务 - 删除
+export function getRemoveProductApi(id) {
+  return request({
+    url: `/product/provider/${id}`,
+    method: 'Delete',
+    urlType: 'NetDevOps'
   })
 }
 
@@ -59,11 +78,10 @@ export function addFavoriteApi(params) {
 }
 
 // 服务收藏 - 删除
-export function removeFavoriteApi(params) {
+export function removeFavoriteApi(id) {
   return request({
-    url: '/product/favorite/',
+    url: `/product/favorite/${id}`,
     method: 'Delete',
-    urlType: 'NetDevOps',
-    params
+    urlType: 'NetDevOps'
   })
 }
