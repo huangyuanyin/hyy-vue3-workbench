@@ -17,8 +17,9 @@
         <div class="recentVisit-line"></div>
         <div class="c_top">
           <span class="subtitle" style="display: inline-block">自定义快捷入口</span>
-          <div class="add">
-            <el-icon><CirclePlusFilled /></el-icon>添加
+          <div class="add" @click="openPopver">
+            <el-icon><CirclePlusFilled /></el-icon>
+            <span>添加</span>
           </div>
         </div>
         <div class="my-navigation-favoriteList">
@@ -482,8 +483,20 @@ onMounted(async () => {
         align-items: center;
         margin-right: 25px;
         cursor: pointer;
+        &:hover {
+          color: #409eff !important;
+        }
         .el-icon {
           margin-right: 5px;
+          font-size: 16px;
+          line-height: 22px;
+        }
+        span {
+          font-size: 14px;
+          color: #252b3a;
+          &:hover {
+            color: #409eff !important;
+          }
         }
       }
     }
