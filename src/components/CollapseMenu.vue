@@ -61,6 +61,9 @@ const handleOpen = (key: string, keyPath: string[]) => {
 }
 
 const handleClose = (key: string, keyPath: string[]) => {
+  if (isShowCard) {
+    return
+  }
   isCollapse.value = true
 }
 
@@ -199,6 +202,9 @@ onMounted(() => {
       transform: translateX(-50%); //居中处理
     }
   }
+}
+.server-wrap {
+  transition: all 3s;
 }
 .right-menu {
   height: calc(100vh - 52px);

@@ -4,9 +4,6 @@
       <el-card style="min-height: 35vh">
         <div class="overview-title">
           <span class="title">我的导航</span>
-          <!-- <el-tooltip class="box-item" effect="dark" content="您可以通过设置左侧服务列表导航改变我的导航的内容和顺序" placement="right-start">
-            <el-button type="primary" text>+添加快捷入口</el-button>
-          </el-tooltip> -->
         </div>
         <span class="subtitle">最近访问</span>
         <div class="my-navigation-favoriteList">
@@ -30,9 +27,9 @@
             {{ item.provider && item.provider !== null ? item.provider.name : item.name }}
             <el-icon @click.stop="removeFavorite(item)"><Close /></el-icon>
           </el-button>
-          <el-popover placement="bottom" :width="400" trigger="click">
+          <el-popover placement="bottom" :width="400" trigger="click" v-if="favoriteList.length < 12">
             <template #reference>
-              <el-button class="addButton" style="background-color: #fff" @click="openPopver">+ 添加快捷入口</el-button>
+              <el-button class="addButton" style="background-color: #fff" @click="openPopver" v-if="favoriteList.length < 12">+ 添加快捷入口</el-button>
             </template>
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
               <el-tab-pane label="添加云服务" name="first"></el-tab-pane>
@@ -253,7 +250,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
+      // if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
       addProduct(formInline)
     }
   })
@@ -372,7 +369,7 @@ const toLink = (val) => {
 
 // 点击添加或删除云服务，并切换显示隐藏
 const changeFavorite = async (val) => {
-  if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
+  // if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
   // val.isShow === true ? removeFavorite(val) : addService(val)
   val.isShow === true ? '' : addService(val)
 }
