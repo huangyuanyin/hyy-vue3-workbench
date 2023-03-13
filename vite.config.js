@@ -7,7 +7,7 @@ import postcsspxtoviewport from 'postcss-px-to-viewport'
 
 /** @type import("vite").UserConfig */
 const viteConfig = {
-  base: '/networkbench/',
+  base: '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src')

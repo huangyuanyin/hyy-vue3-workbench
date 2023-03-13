@@ -15,7 +15,12 @@
           </div>
         </div>
         <div class="recentVisit-line"></div>
-        <span class="subtitle" style="display: inline-block">自定义快捷入口</span>
+        <div class="c_top">
+          <span class="subtitle" style="display: inline-block">自定义快捷入口</span>
+          <div class="add">
+            <el-icon><CirclePlusFilled /></el-icon>添加
+          </div>
+        </div>
         <div class="my-navigation-favoriteList">
           <el-button
             class="button-items"
@@ -27,85 +32,57 @@
             {{ item.provider && item.provider !== null ? item.provider.name : item.name }}
             <el-icon @click.stop="removeFavorite(item)"><Close /></el-icon>
           </el-button>
-          <el-popover placement="bottom" :width="400" trigger="click" v-if="favoriteList.length < 12">
-            <template #reference>
-              <el-button class="addButton" style="background-color: #fff" @click="openPopver" v-if="favoriteList.length < 12">+ 添加快捷入口</el-button>
-            </template>
-            <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-              <el-tab-pane label="添加云服务" name="first"></el-tab-pane>
-              <el-tab-pane label="自定义添加" name="second"></el-tab-pane>
-            </el-tabs>
-            <el-input v-if="activeName === 'first'" v-model="inputSearch" class="w-50 m-2" placeholder="请输入关键词搜索服务" :suffix-icon="Search" />
-            <div v-if="activeName === 'first'" class="service-wrap">
-              <div class="service-item-wrap" v-for="(item, index) in serviceList" :key="'serviceList' + index" @click="changeFavorite(item)">
-                <img v-if="item.isShow" src="https://res.hc-cdn.com/ibiza-home-obsflow/23.2.0.20230228112535/hws/solid-star.9df8f5a727ab994d.svg" alt="" />
-                <img v-else src="https://res.hc-cdn.com/ibiza-home-obsflow/23.2.0.20230228112535/hws/hollow-star.5b7e2e069a591697.svg" alt="" />
-                <div>{{ item.name }}</div>
+          <el-button class="addButton" style="background-color: #fff" @click="openPopver" v-if="favoriteList.length < 12">+ 添加快捷入口</el-button>
+        </div>
+      </el-card>
+      <div class="OperationandMaintenanceManagement">
+        <el-card style="max-height: 40vh; width: 49%; margin-top: 15px">
+          <div class="operationan-title">
+            <span>云监控</span>
+            <span class="operationan-regionName">【陶然亭】</span>
+          </div>
+          <div class="operationan-items">
+            <div class="operationan-item">
+              <span>告警中</span>
+              <span>0</span>
+            </div>
+            <div class="operationan-item">
+              <span>数据不足</span>
+              <span>0</span>
+            </div>
+            <div class="operationan-item">
+              <span>近7天告警总次数</span>
+              <span>0</span>
+            </div>
+          </div>
+        </el-card>
+        <el-card style="height: 35vh; width: 49%; margin-top: 15px">
+          <div class="operationan-title">
+            <span>ESC资源监控</span>
+          </div>
+          <div class="esc-wrap">
+            <div class="cpu-item">
+              <div class="cpu-item-title">
+                <span>CPU使用率</span>
+                <span>0%</span>
+              </div>
+              <div>
+                <el-progress :text-inside="false" :show-text="false" type="line" :stroke-width="20" status="exception" style="width: 100%; height: 10px" />
               </div>
             </div>
-            <el-form v-if="activeName === 'second'" :model="formInline" ref="formInlineRef" :rules="formInlineRules" class="demo-form-inline" label-position="top">
-              <el-form-item label="入口名称" prop="name">
-                <el-input v-model="formInline.name" placeholder="请输入入口名称" />
-              </el-form-item>
-              <el-form-item label="入口链接" prop="links">
-                <el-input v-model="formInline.links" placeholder="请输入入口链接" />
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="onSubmit(formInlineRef)">添加到快捷入口</el-button>
-              </el-form-item>
-            </el-form>
-          </el-popover>
-        </div>
-      </el-card>
-      <el-card style="max-height: 40vh; margin-top: 15px">
-        <div class="overview-title">
-          <span class="title">信安产品推荐</span>
-        </div>
-        <div class="XinAnProduct-wrap">
-          <div class="XinAnProduct-content">
-            <img src="/src/assets/favicon.ico" alt="" />
-            <div class="item">
-              <span class="title">云·速成网站</span>
-              <span class="value">会打字就能建网站，一天上线</span>
+            <div class="ecs-target-item">
+              <span>磁盘读取率</span>
+              <div class="line"></div>
+              <span>0 KB/S</span>
+            </div>
+            <div class="ecs-target-item">
+              <span>网络流入速率</span>
+              <div class="line"></div>
+              <span>0 Kbit/S</span>
             </div>
           </div>
-          <div class="XinAnProduct-content">
-            <img src="/src/assets/favicon.ico" alt="" />
-            <div class="item">
-              <span class="title">云采销</span>
-              <span class="value">帮助企业精准获客并高效管理销售流程</span>
-            </div>
-          </div>
-          <div class="XinAnProduct-content">
-            <img src="/src/assets/favicon.ico" alt="" />
-            <div class="item">
-              <span class="title">文字识别</span>
-              <span class="value">识别图片中的文字信息转换为可编辑文本</span>
-            </div>
-          </div>
-          <div class="XinAnProduct-content">
-            <img src="/src/assets/favicon.ico" alt="" />
-            <div class="item">
-              <span class="title">企业上云必备</span>
-              <span class="value">云上网站标准化部署相关产品推荐</span>
-            </div>
-          </div>
-          <div class="XinAnProduct-content">
-            <img src="/src/assets/favicon.ico" alt="" />
-            <div class="item">
-              <span class="title">云原生数据仓库AnalyticDB</span>
-              <span class="value">新一代云原生数据仓库</span>
-            </div>
-          </div>
-          <div class="XinAnProduct-content">
-            <img src="/src/assets/favicon.ico" alt="" />
-            <div class="item">
-              <span class="title">云·速成网站</span>
-              <span class="value">会打字就能建网站，一天上线</span>
-            </div>
-          </div>
-        </div>
-      </el-card>
+        </el-card>
+      </div>
     </div>
     <div class="wrap-right">
       <el-card style="height: 35vh">
@@ -191,13 +168,45 @@
       </el-card>
     </div>
   </div>
+  <el-dialog v-model="showAddDialog" title="添加" width="30%" custom-class="showAddDialog" :before-close="onCancel">
+    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+      <el-tab-pane label="添加云服务" name="first"></el-tab-pane>
+      <el-tab-pane label="自定义添加" name="second"></el-tab-pane>
+    </el-tabs>
+    <el-input v-if="activeName === 'first'" v-model="inputSearch" class="w-50 m-2" placeholder="请输入关键词搜索服务" :suffix-icon="Search" />
+    <div v-if="activeName === 'first'" class="service-wrap">
+      <div class="service-item-wrap" v-for="(item, index) in serviceList" :key="'serviceList' + index" @click="changeFavorite(item)">
+        <img v-if="item.isShow" src="https://res.hc-cdn.com/ibiza-home-obsflow/23.2.0.20230228112535/hws/solid-star.9df8f5a727ab994d.svg" alt="" />
+        <img v-else src="https://res.hc-cdn.com/ibiza-home-obsflow/23.2.0.20230228112535/hws/hollow-star.5b7e2e069a591697.svg" alt="" />
+        <div>{{ item.name }}</div>
+      </div>
+    </div>
+    <el-form v-if="activeName === 'second'" :model="formInline" ref="formInlineRef" :rules="formInlineRules" class="demo-form-inline">
+      <el-form-item label="入口名称" prop="name" label-width="80px">
+        <el-input v-model="formInline.name" placeholder="请输入入口名称" />
+      </el-form-item>
+      <el-form-item label="入口链接" prop="links" label-width="80px">
+        <el-input v-model="formInline.links" placeholder="请输入入口链接" />
+      </el-form-item>
+      <el-form-item label="" prop="" label-width="80px" v-if="isTag">
+        <el-icon color="#50dA4B" style="margin-right: 5px"><CircleCheckFilled /></el-icon>
+        <span>自定义链接添加成功，您可继续添加</span>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="onCancel">关闭</el-button>
+        <el-button v-if="activeName === 'second'" type="primary" @click="onSubmit(formInlineRef)"> 添加到快捷入口 </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import user from '@/assets/user.png'
 import type { TabsPaneContext } from 'element-plus'
-import { Search, Close } from '@element-plus/icons-vue'
+import { Search, Close, CircleCheckFilled, CirclePlusFilled } from '@element-plus/icons-vue'
 import { getProductApi, getFavoriteApi, getAddProductApi, addFavoriteApi, removeFavoriteApi, getProductCustomizeApi, getRemoveProductApi } from '@/api/navigationManageAPI'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
@@ -205,6 +214,8 @@ import { ElMessage } from 'element-plus'
 const activeName = ref('first')
 const docsActiveName = ref('first')
 const inputSearch = ref('')
+const showAddDialog = ref(false)
+const isTag = ref(false)
 const formInline = reactive({
   name: '',
   links: '',
@@ -228,6 +239,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {}
 const changeDocs = (tab: TabsPaneContext, event: Event) => {}
 
 const openPopver = () => {
+  showAddDialog.value = true
   activeName.value = 'first'
   let arr = []
   favoriteList.value.forEach((item) => {
@@ -246,11 +258,16 @@ const openPopver = () => {
   console.log('console.log(serviceList.value)', favoriteList.value, arr, serviceList.value)
 }
 
+const onCancel = (done: () => void) => {
+  showAddDialog.value = false
+  isTag.value = false
+}
+
 const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      // if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
+      if (favoriteList.value.length >= 12) return ElMessage.warning('最多添加12个快捷入口')
       addProduct(formInline)
     }
   })
@@ -260,6 +277,7 @@ const addProduct = async (params) => {
   const res = await getAddProductApi(params)
   if (res.code === 1000) {
     ElMessage.success('添加成功！')
+    isTag.value = true
     formInlineRef.value?.resetFields()
     sumList()
   }
@@ -369,8 +387,7 @@ const toLink = (val) => {
 
 // 点击添加或删除云服务，并切换显示隐藏
 const changeFavorite = async (val) => {
-  // if (favoriteList.value.length >= 11) return ElMessage.warning('最多添加11个快捷入口')
-  // val.isShow === true ? removeFavorite(val) : addService(val)
+  if (favoriteList.value.length >= 12) return ElMessage.warning('最多添加12个快捷入口')
   val.isShow === true ? '' : addService(val)
 }
 
@@ -455,6 +472,20 @@ onMounted(async () => {
       background-color: #fff;
       border-top: 1px dashed #dfe1e6;
       margin: 20px 0;
+    }
+    .c_top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .add {
+        display: flex;
+        align-items: center;
+        margin-right: 25px;
+        cursor: pointer;
+        .el-icon {
+          margin-right: 5px;
+        }
+      }
     }
     .subtitle {
       font-weight: 500;
@@ -708,6 +739,100 @@ onMounted(async () => {
       white-space: nowrap;
       text-decoration: none !important;
     }
+  }
+}
+.OperationandMaintenanceManagement {
+  display: flex;
+  justify-content: space-between;
+  .operationan-title {
+    font-size: 18px;
+    color: #252b3a;
+    font-weight: 800;
+    margin-right: 5px;
+    margin-bottom: 30px;
+    .operationan-regionName {
+      font-size: 14px;
+      line-height: 20px;
+      color: #8a8e99;
+    }
+  }
+  .operationan-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0 20px;
+    .operationan-item {
+      display: flex;
+      justify-content: space-between;
+      height: 40px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      line-height: 40px;
+      font-size: 14px;
+      border-radius: 2px;
+      cursor: pointer;
+      border-bottom: 1px dashed #dfe1e6;
+    }
+  }
+  .esc-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 150px;
+    padding: 0 20px;
+    .cpu-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      line-height: 40px;
+      font-size: 14px;
+      border-radius: 2px;
+      height: 40px;
+    }
+    .cpu-item-title {
+      display: flex;
+      justify-content: space-between;
+      // margin-bottom: 5px;
+    }
+    .ecs-target-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      height: 40px;
+      // margin-top: 15px;
+      font-size: 14px;
+      .line {
+        height: 0;
+        width: 100%;
+        border-bottom: 1px dashed #dfe1e6;
+        flex: 1;
+        margin: 0 30px;
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.showAddDialog {
+  .el-tabs__item {
+    color: #000 !important;
+  }
+  .is-active {
+    color: #409eff !important;
+  }
+  .el-dialog__footer {
+    display: flex;
+    justify-content: center;
+  }
+  .el-dialog__body {
+    padding-bottom: 20px;
+  }
+  .el-dialog__footer {
+    padding-top: 0px;
   }
 }
 </style>
