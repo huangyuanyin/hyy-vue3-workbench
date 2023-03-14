@@ -7,9 +7,9 @@
       <img :src="logo" />
       <span>信安云测平台</span>
     </div>
-    <span class="line"> | </span>
+    <!-- <span class="line"> | </span> -->
     <div class="work">
-      <el-button text :icon="HomeFilled" size="small" @click="toWork">工作台</el-button>
+      <!-- <el-button text :icon="HomeFilled" size="small" @click="toWork">工作台</el-button> -->
     </div>
     <div class="right-menu">
       <div class="search">

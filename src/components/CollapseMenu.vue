@@ -6,7 +6,7 @@
           <el-menu-item index="prodandserver" class="mainMenu" @mouseenter.native="openMenu" :disabled="true">
             <el-icon><Grid /></el-icon>
             <template #title>
-              <div style="display: flex; align-items: center; justify-content: space-between; width: 140px">
+              <div style="display: flex; align-items: center; justify-content: space-between; width: 100%">
                 <span>产品与服务</span>
                 <el-icon class="arrowRight"><CaretRight /></el-icon>
               </div>
@@ -15,10 +15,10 @@
           <div style="height: calc(100vh - 160px)">
             <template v-for="(item, index) in productList" :key="'productList' + index">
               <el-menu-item :index="item.name" v-if="item.is_domain" @click="handleSelect(item)">
-                <svg-icon iconName="icon-jiekouzhushou" className="icon" style="width: 24px"></svg-icon>
+                <svg-icon :iconName="item.icon" className="icon" style="width: 24px"></svg-icon>
                 <template #title>
                   <span class="title-name" style="margin-right: 5px">{{ item.name }}</span>
-                  {{ item.tag }}
+                  <span class="title-name">{{ item.tag }}</span>
                 </template>
               </el-menu-item>
             </template>
@@ -36,7 +36,7 @@
           <div class="server-container" v-for="(item, index) in serverList" :key="'serverList' + index" style="margin-bottom: 30px">
             <span class="span-title">{{ item.name }}</span>
             <div class="button" v-for="(it, index) in item.children" :key="'item.children' + index">
-              <el-button text @click="goTo(it.links)">{{ it.name }}</el-button>
+              <el-button text @click="goTo(it)">{{ it.name }}</el-button>
             </div>
           </div>
         </el-card>
@@ -68,7 +68,7 @@ const handleClose = () => {
   } else {
     setTimeout(() => {
       isCollapse.value = true
-    }, 200)
+    }, 300)
   }
 }
 
@@ -76,7 +76,7 @@ const openMenu = () => {
   if (!isCollapse.value) {
     setTimeout(() => {
       isShowCard.value = true
-    }, 200)
+    }, 300)
   }
 }
 
@@ -102,8 +102,9 @@ const handleSelect = (value: any) => {
 
 // 跳转
 const goTo = (value: any) => {
-  window.open(value, '_blank')
-  localStorage.getItem('linkList') ? '' : localStorage.setItem('linkList', JSON.stringify({ link: JSON.stringify(value) }))
+  if (!value.enabled) return ElMessage.warning('该服务暂未开放')
+  window.open(value.links, '_blank')
+  localStorage.getItem('linkList') ? '' : localStorage.setItem('linkList', JSON.stringify({ link: JSON.stringify(value.links) }))
 }
 
 const getCategory = async () => {
@@ -164,16 +165,21 @@ onMounted(() => {
   z-index: 999999;
   --el-menu-base-level-padding: 15px !important;
   &:not(.el-menu--collapse) {
-    width: 200px;
+    width: 223px;
   }
   :deep(.is-disabled) {
     height: 70px;
   }
   .title-name {
+    margin-left: 10px;
+    font-size: 12px;
     margin-right: 20px;
+    color: #666;
   }
   .el-menu-item {
     font-size: 14px !important;
+    // margin-left: 10px;
+    color: #666;
     font-family: '微软雅黑';
   }
   .el-menu-item.is-disabled {
@@ -194,7 +200,7 @@ onMounted(() => {
     position: relative;
     padding-right: 0px;
     .el-icon {
-      color: #606266;
+      margin-right: 20px;
     }
     .arrowRight {
       // margin-left: ;
@@ -213,14 +219,14 @@ onMounted(() => {
   }
 }
 .server-wrap {
-  transition: all 3s;
+  // transition: all 0.3s;
 }
 .right-menu {
   height: calc(100vh - 52px);
   position: absolute;
   top: 50px;
-  z-index: 20000;
-  left: 198px;
+  z-index: 20;
+  left: 220px;
   min-width: 40%;
   font-size: 16px !important;
   font-family: '微软雅黑';

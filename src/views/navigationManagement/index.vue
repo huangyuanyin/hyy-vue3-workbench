@@ -16,7 +16,12 @@
     <el-card class="form-card">
       <header>{{ isCategory === 0 ? '服务分组' : '产品服务' }}</header>
       <div style="padding: 20px 30px 0 30px">
-        <el-button type="primary" @click="addNavigation" style="margin-bottom: 10px">添加</el-button>
+        <div class="search-wrap" style="margin-bottom: 20px">
+          <el-button type="primary" @click="addNavigation">添加</el-button>
+          <el-select v-if="isCategory === 1" v-model="inputSearch" class="m-2" placeholder="按服务分组名称搜索..." clearable @change="searchProduct">
+            <el-option :label="item.name" :value="item.id" v-for="(item, index) in categoryList" :key="'categoryList' + index" />
+          </el-select>
+        </div>
         <div class="form-wrap" style="height: calc(78vh - 70px)">
           <el-table v-if="isCategory === 0" :data="serverTableData" stripe width="100%">
             <el-table-column prop="name" label="分组名" align="center" />
@@ -122,9 +127,9 @@
       <el-form-item label="分组名" prop="name">
         <el-input v-model="serverForm.name" placeholder="请输入分组名" maxlength="30" show-word-limit />
       </el-form-item>
-      <el-form-item label="创建人" prop="username">
+      <!-- <el-form-item label="创建人" prop="username">
         <el-input v-model="serverForm.username" :disabled="true" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <div class="button-wrap">
           <el-button @click="resertForm(serverRuleFormRef)">取消</el-button>
@@ -136,24 +141,32 @@
     <el-form v-if="isCategory === 1" :model="productForm" ref="productRuleFormRef" :rules="productRules" label-width="120px" label-position="top">
       <el-row>
         <el-col :span="10">
+          <el-form-item label="分组" prop="category">
+            <el-select v-model="productForm.category" placeholder="请选择分组" @visible-change="toGetCategoryList">
+              <el-option :label="item.name" :value="item.id" v-for="(item, index) in categoryList" :key="'categoryList' + index" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="图标" prop="icon">
+            <el-select v-model="productForm.icon" placeholder="请选择图标">
+              <el-option v-for="item in iconList" :key="item" :label="item" :value="item">
+                <svg-icon :iconName="item" className="icon" style="width: 170px; height: 25px"></svg-icon>
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="服务名" prop="name">
             <el-input v-model="productForm.name" placeholder="请输入服务名" maxlength="30" show-word-limit />
           </el-form-item>
           <el-form-item label="标识" prop="tag">
             <el-input v-model="productForm.tag" placeholder="请输入标识" />
           </el-form-item>
-          <el-form-item label="图标" prop="icon">
-            <el-input v-model="productForm.icon" placeholder="请输入图标" />
-          </el-form-item>
-          <el-form-item label="跳转地址" prop="links"> <el-input v-model="productForm.links" placeholder="例如：http://www.baidu.com" /></el-form-item>
-          <el-form-item label="创建人" prop="creator">
+          <!-- <el-form-item label="创建人" prop="creator">
             <el-input v-model="productForm.creator" :disabled="true" />
-          </el-form-item>
+          </el-form-item> -->
         </el-col>
         <el-col :span="4"></el-col>
         <el-col :span="10">
           <el-form-item label="是否生效" prop="enabled">
-            <el-select v-model="productForm.enabled" :disabled="true">
+            <el-select v-model="productForm.enabled">
               <el-option label="是" value="True" />
               <el-option label="否" value="False" />
             </el-select>
@@ -164,12 +177,8 @@
               <el-option label="否" value="False" />
             </el-select>
           </el-form-item>
-          <el-form-item label="分组" prop="category">
-            <el-select v-model="productForm.category" placeholder="请选择分组" @visible-change="toGetCategoryList">
-              <el-option :label="item.name" :value="item.id" v-for="(item, index) in categoryList" :key="'categoryList' + index" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="描述" prop="description">
+          <el-form-item label="跳转地址" prop="links"> <el-input v-model="productForm.links" placeholder="例如：http://www.baidu.com" /></el-form-item>
+          <el-form-item label="描述">
             <el-input v-model="productForm.description" placeholder="请输入描述" />
           </el-form-item>
         </el-col>
@@ -199,13 +208,16 @@ import {
   getEditProductApi,
   getCategoryIdApi,
   getEditCategoryApi,
-  getDeleteCategoryApi
+  getDeleteCategoryApi,
+  getProductCustomizeApi
 } from '@/api/navigationManageAPI'
 import { ElMessage } from 'element-plus'
 import { emitter } from '@/utils/mitt'
 import { utc2beijing } from '@/utils/util'
-import { Edit } from '@element-plus/icons-vue'
+import { Edit, Search } from '@element-plus/icons-vue'
+import { iconList } from '@/data/index.js'
 
+const inputSearch = ref('')
 const isCategory = ref(0)
 const dialogVisible = ref(false)
 const creator = ref(JSON.parse(localStorage.getItem('userInfo') || '{}').username)
@@ -264,6 +276,31 @@ const addNavigation = () => {
   dialogVisible.value = true
 }
 
+const searchProduct = async (val) => {
+  console.log(`output->val`, val)
+  productCurrentPage.value = 1
+  const params = {
+    category: val,
+    is_customize: 'False',
+    creator: JSON.parse(localStorage.getItem('userInfo') || '{}').username
+  }
+  const res = await getProductCustomizeApi(params)
+  if (res.code === 1000) {
+    nextTick(() => {
+      productTableData.value = res.data.slice((productCurrentPage.value - 1) * 10, productCurrentPage.value * 10) || []
+      productTableDataTotal.value = res.data.length
+      // 遍历获取serverTableData.value和categoryList.value，如果有相同的，就把categoryList.value的id赋值给serverTableData.value的category
+      productTableData.value.forEach((item) => {
+        categoryList.value.forEach((item2) => {
+          if (item2.id === item.category) {
+            item.category = item2.name
+          }
+        })
+      })
+    })
+  }
+}
+
 const editId = ref('')
 
 const editNavigation = async (type, id) => {
@@ -289,8 +326,8 @@ const getProductId = async (id) => {
     productForm.tag = res.data.tag
     productForm.icon = res.data.icon
     productForm.links = res.data.links
-    productForm.enabled = res.data.enabled
-    productForm.is_domain = res.data.is_domain
+    productForm.enabled = res.data.enabled ? '是' : '否'
+    productForm.is_domain = res.data.is_domain ? '是' : '否'
     productForm.is_customize = res.data.is_customize
     productForm.category = res.data.category
     productForm.description = res.data.description
@@ -301,9 +338,13 @@ const getProductId = async (id) => {
 
 const handleClose = (done: () => void) => {
   dialogVisible.value = false
+  // 重置表单
+  isCategory.value === 0 ? resertForm(serverRuleFormRef.value) : resertForm(productRuleFormRef.value)
 }
 
 const submitForm = async (formEl: FormInstance | undefined, type) => {
+  productForm.is_domain = productForm.is_domain === '是' ? 'True' : 'False'
+  productForm.enabled = productForm.enabled === '是' ? 'True' : 'False'
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
@@ -322,7 +363,7 @@ const addCategory = async (params) => {
   const res = await getAddCategoryApi(params)
   if (res.code === 1000) {
     ElMessage.success('添加成功！')
-    // emitter.emit('toRefresh', { isRefresh: 'true' })
+    emitter.emit('toRefresh', { isRefresh: 'true' })
     getCategory()
     serverRuleFormRef.value?.resetFields()
     dialogVisible.value = false
@@ -335,7 +376,7 @@ const addProduct = async (params) => {
     ElMessage.success('添加成功！')
     productCurrentPage.value = 1
     getProduct()
-    // emitter.emit('toRefresh', { isRefresh: 'true' })
+    emitter.emit('toRefresh', { isRefresh: 'true' })
     productRuleFormRef.value?.resetFields()
     dialogVisible.value = false
   }
@@ -346,9 +387,10 @@ const editCategory = async (params) => {
   const res = await getEditCategoryApi(editId.value, params)
   if (res.code === 1000) {
     ElMessage.success('编辑成功！')
-    // emitter.emit('toRefresh', { isRefresh: 'true' })
+    emitter.emit('toRefresh', { isRefresh: 'true' })
     getCategory()
     serverRuleFormRef.value?.resetFields()
+    emitter.emit('toRefresh', { isRefresh: 'true' })
     dialogVisible.value = false
   }
 }
@@ -360,6 +402,7 @@ const editProduct = async (params) => {
     ElMessage.success('编辑成功！')
     productCurrentPage.value = 1
     getProduct()
+    emitter.emit('toRefresh', { isRefresh: 'true' })
     productRuleFormRef.value?.resetFields()
     dialogVisible.value = false
   }
@@ -379,7 +422,11 @@ const getCategory = async (...args) => {
 
 // 获取产品
 const getProduct = async () => {
-  const res = await getProductApi()
+  const params = {
+    is_customize: 'False',
+    creator: JSON.parse(localStorage.getItem('userInfo') || '{}').username
+  }
+  const res = await getProductCustomizeApi(params)
   if (res.code === 1000) {
     productTableData.value = res.data.slice((productCurrentPage.value - 1) * 10, productCurrentPage.value * 10) || []
     productTableDataTotal.value = res.data.length
@@ -517,6 +564,11 @@ onMounted(() => {
       padding: 0px;
     }
     flex: 1;
+    .search-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     header {
       font-size: 16px;
       color: #292929;
