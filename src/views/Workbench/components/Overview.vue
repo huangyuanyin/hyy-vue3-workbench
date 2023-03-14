@@ -36,8 +36,8 @@
           <el-button class="addButton" style="background-color: #fff" @click="openPopver" v-if="favoriteList.length < 12">+ 添加快捷入口</el-button>
         </div>
       </el-card>
-      <div class="OperationandMaintenanceManagement">
-        <el-card style="max-height: 40vh; width: 49%; margin-top: 15px">
+      <div class="OperationandMaintenanceManagement" style="height: calc(38vh + 30px); margin-top: 15px">
+        <el-card style="height: 100%; width: 49%">
           <div class="operationan-title">
             <span>云监控</span>
             <!-- <span class="operationan-regionName">【陶然亭】</span> -->
@@ -57,7 +57,7 @@
             </div>
           </div>
         </el-card>
-        <el-card style="height: 35vh; width: 49%; margin-top: 15px">
+        <el-card style="height: 100%; width: 49%">
           <div class="operationan-title">
             <span>ESC资源监控</span>
           </div>
@@ -129,44 +129,46 @@
           </div>
         </div>
       </el-card>
-      <el-card class="next-card" style="height: 15vh; margin-top: 15px">
-        <div class="next-content">
-          <h3>待办事项</h3>
-          <div class="home-backlog">
-            <div class="home-backlog-item">
-              <span class="item-title">待办工单</span>
-              <span class="item-value">0</span>
-            </div>
-            <div class="home-backlog-item">
-              <span class="item-title">待办工单</span>
-              <span class="item-value">0</span>
-            </div>
-            <div class="home-backlog-item">
-              <span class="item-title">待办工单</span>
-              <span class="item-value">0</span>
+      <div style="height: 15vh">
+        <el-card class="next-card" style="height: 15vh; margin-top: 15px">
+          <div class="next-content">
+            <h3>待办事项</h3>
+            <div class="home-backlog">
+              <div class="home-backlog-item">
+                <span class="item-title">待办工单</span>
+                <span class="item-value">0</span>
+              </div>
+              <div class="home-backlog-item">
+                <span class="item-title">待办工单</span>
+                <span class="item-value">0</span>
+              </div>
+              <div class="home-backlog-item">
+                <span class="item-title">待办工单</span>
+                <span class="item-value">0</span>
+              </div>
             </div>
           </div>
-        </div>
-      </el-card>
-      <el-card class="next-card" style="height: 23vh; margin-top: 15px">
-        <div class="next-content">
-          <h3>帮助文档</h3>
-          <div class="help-docs">
-            <el-tabs v-model="docsActiveName" class="demo-tabs" @tab-click="changeDocs">
-              <el-tab-pane label="新手帮助文档" name="first">
-                <div class="dosc-content">
-                  <div class="help-docs-item">信安云测控制台介绍</div>
-                  <div class="help-docs-item">信安云测控制台介绍</div>
-                  <div class="help-docs-item">信安云测控制台介绍</div>
-                  <div class="help-docs-item">信安云测控制台介绍</div>
-                  <div class="help-docs-item">信安云测控制台介绍</div>
-                </div>
-              </el-tab-pane>
-              <el-tab-pane label="最佳实践" name="second">最佳实践</el-tab-pane>
-            </el-tabs>
+        </el-card>
+        <el-card class="next-card" style="height: 23vh; margin-top: 15px">
+          <div class="next-content">
+            <h3>帮助文档</h3>
+            <div class="help-docs">
+              <el-tabs v-model="docsActiveName" class="demo-tabs" @tab-click="changeDocs">
+                <el-tab-pane label="新手帮助文档" name="first">
+                  <div class="dosc-content">
+                    <div class="help-docs-item">信安云测控制台介绍</div>
+                    <div class="help-docs-item">信安云测控制台介绍</div>
+                    <div class="help-docs-item">信安云测控制台介绍</div>
+                    <div class="help-docs-item">信安云测控制台介绍</div>
+                    <div class="help-docs-item">信安云测控制台介绍</div>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="最佳实践" name="second">最佳实践</el-tab-pane>
+              </el-tabs>
+            </div>
           </div>
-        </div>
-      </el-card>
+        </el-card>
+      </div>
     </div>
   </div>
   <el-dialog v-model="showAddDialog" title="添加" width="30%" custom-class="showAddDialog" :before-close="onCancel">
@@ -381,7 +383,7 @@ const toLink = (val) => {
       }
       return cur
     }, [])
-    .slice(0, 12)
+    .slice(0, 6)
   localStorage.setItem('recentLinks', JSON.stringify(visitedList.value))
   window.location.href = val.links
 }

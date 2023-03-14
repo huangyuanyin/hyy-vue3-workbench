@@ -486,9 +486,9 @@ const handleServerCurrentChange = (val: number) => {
   getCategory()
 }
 
-onMounted(() => {
-  getCategory()
-  getProduct()
+onMounted(async () => {
+  await getCategory()
+  await getProduct()
 })
 </script>
 

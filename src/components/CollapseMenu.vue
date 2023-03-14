@@ -4,7 +4,7 @@
       <el-col :span="4">
         <el-menu default-active="" class="elMenu-wrap" :collapse="isCollapse && !isShowCard" @mouseover.prevent="handleOpen" @mouseleave="handleClose">
           <el-menu-item index="prodandserver" class="mainMenu" @mouseenter.native="openMenu" :disabled="true">
-            <el-icon><Grid /></el-icon>
+            <el-icon :size="22"><Grid /></el-icon>
             <template #title>
               <div style="display: flex; align-items: center; justify-content: space-between; width: 100%">
                 <span>产品与服务</span>
@@ -15,7 +15,7 @@
           <div style="height: calc(100vh - 160px)">
             <template v-for="(item, index) in productList" :key="'productList' + index">
               <el-menu-item :index="item.name" v-if="item.is_domain" @click="handleSelect(item)">
-                <svg-icon :iconName="item.icon" className="icon" style="width: 24px"></svg-icon>
+                <svg-icon :iconName="item.icon" className="icon" style="min-width: 22px"></svg-icon>
                 <template #title>
                   <span class="title-name" style="margin-right: 5px">{{ item.name }}</span>
                   <span class="title-name">{{ item.tag }}</span>
@@ -163,9 +163,9 @@ onMounted(() => {
   left: 0px;
   height: calc(100vh - 50px);
   z-index: 999999;
-  --el-menu-base-level-padding: 15px !important;
+  --el-menu-base-level-padding: 13px !important;
   &:not(.el-menu--collapse) {
-    width: 223px;
+    width: 13%;
   }
   :deep(.is-disabled) {
     height: 70px;
@@ -222,11 +222,12 @@ onMounted(() => {
   // transition: all 0.3s;
 }
 .right-menu {
-  height: calc(100vh - 52px);
+  box-sizing: border-box;
+  height: calc(100vh - 50px);
   position: absolute;
   top: 50px;
   z-index: 20;
-  left: 220px;
+  left: 13%;
   min-width: 40%;
   font-size: 16px !important;
   font-family: '微软雅黑';
@@ -272,6 +273,11 @@ onMounted(() => {
     cursor: pointer;
     margin-left: 20px;
     width: 40px;
+  }
+}
+.icon-main {
+  svg {
+    width: 24px;
   }
 }
 </style>
