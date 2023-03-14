@@ -91,7 +91,7 @@
           <div class="_ov-user-info">
             <img :src="user" alt="" />
             <div class="_ov-user-info__body">
-              <div class="_ov-user-info__name">白T</div>
+              <div class="_ov-user-info__name">{{ creator }}</div>
               <div class="app-overview-form">
                 <div class="app-overview-form__item">
                   <span class="app-overview-form__label">账号ID</span>
@@ -99,7 +99,9 @@
                 </div>
                 <div class="app-overview-form__item">
                   <span class="app-overview-form__label">身份</span>
-                  <el-tag>管理员</el-tag>
+                  <template v-for="(item, index) in roleList" :key="'roleList' + index">
+                    <el-tag v-if="item.value === role">{{ item.name }}</el-tag>
+                  </template>
                 </div>
               </div>
             </div>
@@ -213,12 +215,15 @@ import { Search, Close, CircleCheckFilled, CirclePlusFilled } from '@element-plu
 import { getProductApi, getFavoriteApi, getAddProductApi, addFavoriteApi, removeFavoriteApi, getProductCustomizeApi, getRemoveProductApi } from '@/api/navigationManageAPI'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import { roleList } from '@/data/index'
 
 const activeName = ref('first')
 const docsActiveName = ref('first')
 const inputSearch = ref('')
 const showAddDialog = ref(false)
 const isTag = ref(false)
+const creator = ref(JSON.parse(localStorage.getItem('userInfo') || '{}').nickname)
+const role = ref(JSON.parse(localStorage.getItem('userInfo') || '{}').role)
 const formInline = reactive({
   name: '',
   links: '',
@@ -581,7 +586,7 @@ onMounted(async () => {
               }
               .el-tag {
                 height: 20px;
-                width: 54px;
+                min-width: 54px;
                 font-size: 12px;
               }
               .app-overview-form__controls {

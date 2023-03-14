@@ -59,6 +59,7 @@ const submitForm = () => {
   height: 100vh;
   background-image: url(../../assets/login-bg.jpg);
   background-size: 100%;
+  background-repeat: round;
 }
 .ms-title {
   width: 100%;
