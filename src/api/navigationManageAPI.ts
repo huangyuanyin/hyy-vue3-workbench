@@ -9,6 +9,15 @@ export function getCategoryApi() {
   })
 }
 
+// 服务分组 - id获取
+export function getCategoryIdApi(id) {
+  return request({
+    url: `/product/category/${id}`,
+    method: 'Get',
+    urlType: 'NetDevOps'
+  })
+}
+
 // 服务分组 - 添加
 export function getAddCategoryApi(params: any) {
   return request({
@@ -16,6 +25,25 @@ export function getAddCategoryApi(params: any) {
     method: 'POST',
     urlType: 'NetDevOps',
     data: params
+  })
+}
+
+// 服务分组 - 编辑
+export function getEditCategoryApi(id, params) {
+  return request({
+    url: `/product/category/${id}`,
+    method: 'put',
+    urlType: 'NetDevOps',
+    data: params
+  })
+}
+
+// 服务分组 - 删除
+export function getDeleteCategoryApi(id) {
+  return request({
+    url: `/product/category/${id}`,
+    method: 'Delete',
+    urlType: 'NetDevOps'
   })
 }
 
@@ -38,11 +66,30 @@ export function getProductCustomizeApi(params) {
   })
 }
 
+// 产品服务 - ID获取
+export function getProductIdApi(id) {
+  return request({
+    url: `/product/provider/${id}`,
+    method: 'Get',
+    urlType: 'NetDevOps'
+  })
+}
+
 // 产品服务 - 添加
 export function getAddProductApi(params) {
   return request({
     url: '/product/provider/',
     method: 'POST',
+    urlType: 'NetDevOps',
+    data: params
+  })
+}
+
+// 产品服务 - 编辑
+export function getEditProductApi(id, params) {
+  return request({
+    url: `/product/provider/${id}`,
+    method: 'put',
     urlType: 'NetDevOps',
     data: params
   })

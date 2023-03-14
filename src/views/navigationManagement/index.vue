@@ -15,22 +15,127 @@
     </el-card>
     <el-card class="form-card">
       <header>{{ isCategory === 0 ? '服务分组' : '产品服务' }}</header>
-      <div class="form-wrap" style="height: calc(78vh - 70px)">
-        <el-form v-if="isCategory === 0" :model="serverForm" ref="serverRuleFormRef" :rules="serverRules" label-width="120px" label-position="top">
-          <el-form-item label="分组名" prop="name">
-            <el-input v-model="serverForm.name" placeholder="请输入分组名" maxlength="30" show-word-limit />
-          </el-form-item>
-          <el-form-item label="创建人" prop="username">
-            <el-input v-model="serverForm.username" :disabled="true" />
-          </el-form-item>
-          <el-form-item>
-            <div class="button-wrap">
-              <el-button @click="resertForm(serverRuleFormRef)">重置</el-button>
-              <el-button type="primary" @click="submitForm(serverRuleFormRef, 'server')">添加</el-button>
-            </div>
-          </el-form-item>
-        </el-form>
-        <el-form v-if="isCategory === 1" :model="productForm" ref="productRuleFormRef" :rules="productRules" label-width="120px" label-position="top">
+      <div style="padding: 20px 30px 0 30px">
+        <el-button type="primary" @click="addNavigation" style="margin-bottom: 10px">添加</el-button>
+        <div class="form-wrap" style="height: calc(78vh - 70px)">
+          <el-table v-if="isCategory === 0" :data="serverTableData" stripe width="100%">
+            <el-table-column prop="name" label="分组名" align="center" />
+            <el-table-column label="创建时间" align="center">
+              <template #default="scope">
+                <span>{{ utc2beijing(scope.row.created_time) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="user" label="创建人" align="center">
+              <template #default="scope">
+                <span>{{ creator }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="120" align="center">
+              <template #default="scope">
+                <el-button link type="primary" size="small" @click="editNavigation('server', scope.row.id)">编辑</el-button>
+                <el-popconfirm title="确定要删除此产品服务?" @confirm="handleDelete('server', scope.row)">
+                  <template #reference>
+                    <el-button link type="danger" size="small">删除</el-button>
+                  </template>
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            style="display: flex; justify-content: flex-end; margin-top: 20px"
+            v-if="isCategory === 0"
+            v-model:current-page="serverCurrentPage"
+            :page-size="10"
+            background
+            layout="total, prev, pager, next"
+            :total="serverTableDataTotal"
+            @size-change="handleServerSizeChange"
+            @current-change="handleServerCurrentChange"
+          />
+
+          <el-table v-if="isCategory === 1" :data="productTableData" stripe width="100%" height="56vh">
+            <el-table-column prop="name" label="服务名" align="center" />
+            <el-table-column prop="tag" label="标识" align="center">
+              <template #default="scope">
+                <el-tag v-if="scope.row.tag === ''" type="info">暂无标识</el-tag>
+                <span v-else>{{ scope.row.tag }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="enabled" label="是否生效" align="center">
+              <template #default="scope">
+                <span v-if="scope.row.enabled">是</span>
+                <span v-else>否</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="is_domain" label="是否侧边显示" align="center">
+              <template #default="scope">
+                <span v-if="scope.row.is_domain">是</span>
+                <span v-else>否</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="category" label="分组" align="center">
+              <template #default="scope">
+                <el-tag v-if="scope.row.category === null" type="info">暂无分组</el-tag>
+                <span v-else>{{ scope.row.category }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="description" label="描述" align="center">
+              <template #default="scope">
+                <el-tag v-if="scope.row.description === ''" type="info">暂无描述</el-tag>
+                <span v-else>{{ scope.row.description }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="创建时间" align="center">
+              <template #default="scope">
+                <span>{{ utc2beijing(scope.row.created_time) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="creator" label="创建人" align="center" />
+            <el-table-column fixed="right" label="操作" width="120" align="center">
+              <template #default="scope">
+                <el-button link type="primary" size="small" @click="editNavigation('product', scope.row.id)">编辑</el-button>
+                <el-popconfirm title="确定要删除此产品服务?" @confirm="handleDelete('product', scope.row)">
+                  <template #reference>
+                    <el-button link type="danger" size="small">删除</el-button>
+                  </template>
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            style="display: flex; justify-content: flex-end; margin-top: 20px"
+            v-if="isCategory === 1"
+            v-model:current-page="productCurrentPage"
+            :page-size="10"
+            background
+            layout="total, prev, pager, next"
+            :total="productTableDataTotal"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
+      </div>
+    </el-card>
+  </div>
+  <el-dialog v-model="dialogVisible" :title="dialogTitle" width="50%" :before-close="handleClose">
+    <el-form v-if="isCategory === 0" :model="serverForm" ref="serverRuleFormRef" :rules="serverRules" label-width="120px">
+      <el-form-item label="分组名" prop="name">
+        <el-input v-model="serverForm.name" placeholder="请输入分组名" maxlength="30" show-word-limit />
+      </el-form-item>
+      <el-form-item label="创建人" prop="username">
+        <el-input v-model="serverForm.username" :disabled="true" />
+      </el-form-item>
+      <el-form-item>
+        <div class="button-wrap">
+          <el-button @click="resertForm(serverRuleFormRef)">取消</el-button>
+          <el-button type="primary" @click="submitForm(serverRuleFormRef, 'server')">确定</el-button>
+        </div>
+      </el-form-item>
+    </el-form>
+
+    <el-form v-if="isCategory === 1" :model="productForm" ref="productRuleFormRef" :rules="productRules" label-width="120px" label-position="top">
+      <el-row>
+        <el-col :span="10">
           <el-form-item label="服务名" prop="name">
             <el-input v-model="productForm.name" placeholder="请输入服务名" maxlength="30" show-word-limit />
           </el-form-item>
@@ -40,9 +145,13 @@
           <el-form-item label="图标" prop="icon">
             <el-input v-model="productForm.icon" placeholder="请输入图标" />
           </el-form-item>
-          <el-form-item label="跳转地址" prop="links">
-            <el-input v-model="productForm.links" placeholder="例如：http://www.baidu.com" />
+          <el-form-item label="跳转地址" prop="links"> <el-input v-model="productForm.links" placeholder="例如：http://www.baidu.com" /></el-form-item>
+          <el-form-item label="创建人" prop="creator">
+            <el-input v-model="productForm.creator" :disabled="true" />
           </el-form-item>
+        </el-col>
+        <el-col :span="4"></el-col>
+        <el-col :span="10">
           <el-form-item label="是否生效" prop="enabled">
             <el-select v-model="productForm.enabled" :disabled="true">
               <el-option label="是" value="True" />
@@ -60,37 +169,58 @@
               <el-option :label="item.name" :value="item.id" v-for="(item, index) in categoryList" :key="'categoryList' + index" />
             </el-select>
           </el-form-item>
-          <el-form-item label="创建人" prop="creator">
-            <el-input v-model="productForm.creator" :disabled="true" />
-          </el-form-item>
           <el-form-item label="描述" prop="description">
             <el-input v-model="productForm.description" placeholder="请输入描述" />
           </el-form-item>
-          <el-form-item>
-            <div class="button-wrap">
-              <el-button @click="resertForm(productRuleFormRef)">重置</el-button>
-              <el-button type="primary" @click="submitForm(productRuleFormRef, 'product')">添加</el-button>
-            </div>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-card>
-  </div>
+        </el-col>
+      </el-row>
+      <el-row style="justify-content: center; display: flex">
+        <el-form-item class="button-wrap" style="justify-content: center">
+          <div class="button-wrap">
+            <el-button @click="resertForm(productRuleFormRef)">取消</el-button>
+            <el-button type="primary" @click="submitForm(productRuleFormRef, 'product')">确定</el-button>
+          </div>
+        </el-form-item>
+      </el-row>
+    </el-form>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
-import { getAddCategoryApi, getAddProductApi, getCategoryApi, getProductApi } from '@/api/navigationManageAPI'
+import {
+  getAddCategoryApi,
+  getAddProductApi,
+  getCategoryApi,
+  getProductApi,
+  getRemoveProductApi,
+  getProductIdApi,
+  getEditProductApi,
+  getCategoryIdApi,
+  getEditCategoryApi,
+  getDeleteCategoryApi
+} from '@/api/navigationManageAPI'
 import { ElMessage } from 'element-plus'
 import { emitter } from '@/utils/mitt'
+import { utc2beijing } from '@/utils/util'
+import { Edit } from '@element-plus/icons-vue'
 
 const isCategory = ref(0)
+const dialogVisible = ref(false)
+const creator = ref(JSON.parse(localStorage.getItem('userInfo') || '{}').username)
+const serverTableData = ref([] as any[])
+const productTableData = ref([] as any[])
+const productCurrentPage = ref(1)
+const productTableDataTotal = ref(0)
+const serverCurrentPage = ref(1)
+const serverTableDataTotal = ref(0)
+const dialogTitle = ref('')
 const navigationTypes = ref([
   { label: '服务分组', value: 0 },
   { label: '产品服务', value: 1 }
 ])
-const productForm = reactive({
+let productForm = reactive({
   name: '',
   tag: '',
   icon: '',
@@ -129,11 +259,59 @@ const changeNavigationType = (val) => {
   isCategory.value = val
 }
 
+const addNavigation = () => {
+  dialogTitle.value = '添加'
+  dialogVisible.value = true
+}
+
+const editId = ref('')
+
+const editNavigation = async (type, id) => {
+  editId.value = id
+  type === 'product' ? getProductId(id) : getCategoryId(id)
+}
+
+// 服务分组 id获取
+const getCategoryId = async (id) => {
+  const res = await getCategoryIdApi(id)
+  if (res.code === 1000) {
+    serverForm.name = res.data.name
+    dialogVisible.value = true
+    dialogTitle.value = '编辑'
+  }
+}
+
+// 产品服务 id获取
+const getProductId = async (id) => {
+  const res = await getProductIdApi(id)
+  if (res.code === 1000) {
+    productForm.name = res.data.name
+    productForm.tag = res.data.tag
+    productForm.icon = res.data.icon
+    productForm.links = res.data.links
+    productForm.enabled = res.data.enabled
+    productForm.is_domain = res.data.is_domain
+    productForm.is_customize = res.data.is_customize
+    productForm.category = res.data.category
+    productForm.description = res.data.description
+    dialogVisible.value = true
+    dialogTitle.value = '编辑'
+  }
+}
+
+const handleClose = (done: () => void) => {
+  dialogVisible.value = false
+}
+
 const submitForm = async (formEl: FormInstance | undefined, type) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      type === 'server' ? addCategory(serverForm) : addProduct(productForm)
+      if (dialogTitle.value === '编辑') {
+        type === 'server' ? editCategory(serverForm) : editProduct(productForm)
+      } else {
+        type === 'server' ? addCategory(serverForm) : addProduct(productForm)
+      }
     } else {
       ElMessage.error('请检查输入项！')
     }
@@ -144,8 +322,10 @@ const addCategory = async (params) => {
   const res = await getAddCategoryApi(params)
   if (res.code === 1000) {
     ElMessage.success('添加成功！')
-    emitter.emit('toRefresh', { isRefresh: 'true' })
+    // emitter.emit('toRefresh', { isRefresh: 'true' })
+    getCategory()
     serverRuleFormRef.value?.resetFields()
+    dialogVisible.value = false
   }
 }
 
@@ -153,27 +333,116 @@ const addProduct = async (params) => {
   const res = await getAddProductApi(params)
   if (res.code === 1000) {
     ElMessage.success('添加成功！')
-    emitter.emit('toRefresh', { isRefresh: 'true' })
+    productCurrentPage.value = 1
+    getProduct()
+    // emitter.emit('toRefresh', { isRefresh: 'true' })
     productRuleFormRef.value?.resetFields()
+    dialogVisible.value = false
   }
 }
 
-const toGetCategoryList = (val) => {
-  if (val) getCategory()
+// 服务分组 编辑
+const editCategory = async (params) => {
+  const res = await getEditCategoryApi(editId.value, params)
+  if (res.code === 1000) {
+    ElMessage.success('编辑成功！')
+    // emitter.emit('toRefresh', { isRefresh: 'true' })
+    getCategory()
+    serverRuleFormRef.value?.resetFields()
+    dialogVisible.value = false
+  }
 }
 
-const getCategory = async () => {
+// 产品服务 编辑
+const editProduct = async (params) => {
+  const res = await getEditProductApi(editId.value, params)
+  if (res.code === 1000) {
+    ElMessage.success('编辑成功！')
+    productCurrentPage.value = 1
+    getProduct()
+    productRuleFormRef.value?.resetFields()
+    dialogVisible.value = false
+  }
+}
+
+const toGetCategoryList = (val) => {}
+
+const getCategory = async (...args) => {
+  console.log(`output->args`, args[0])
   const res = await getCategoryApi()
   if (res.code === 1000) {
     categoryList.value = res.data || []
+    serverTableData.value = res.data.slice((serverCurrentPage.value - 1) * 10, serverCurrentPage.value * 10) || []
+    serverTableDataTotal.value = res.data.length
   }
 }
 
+// 获取产品
+const getProduct = async () => {
+  const res = await getProductApi()
+  if (res.code === 1000) {
+    productTableData.value = res.data.slice((productCurrentPage.value - 1) * 10, productCurrentPage.value * 10) || []
+    productTableDataTotal.value = res.data.length
+    // 遍历获取serverTableData.value和categoryList.value，如果有相同的，就把categoryList.value的id赋值给serverTableData.value的category
+    productTableData.value.forEach((item) => {
+      categoryList.value.forEach((item2) => {
+        if (item2.id === item.category) {
+          item.category = item2.name
+        }
+      })
+    })
+    console.log(`output->`, productTableData.value, categoryList.value)
+  }
+}
+
+// 服务分组 - 移除
+const getRemoveCategory = async (id) => {
+  const res = await getDeleteCategoryApi(id)
+  if (res.code === 1000) {
+    ElMessage.success('移除成功！')
+    getCategory()
+  }
+}
+
+// 产品服务 - 移除
+const getRemoveProduct = async (id) => {
+  const res = await getRemoveProductApi(id)
+  if (res.code === 1000) {
+    ElMessage.success('移除成功！')
+    getProduct()
+  }
+}
+
+const handleDelete = (type, val) => {
+  type === 'product' ? getRemoveProduct(val.id) : getRemoveCategory(val.id)
+}
+
 const resertForm = (formEl: FormInstance | undefined) => {
+  dialogVisible.value = false
   formEl.resetFields()
 }
 
-onMounted(() => {})
+const handleSizeChange = (val: number) => {
+  console.log(`${val} items per page`)
+}
+const handleCurrentChange = (val: number) => {
+  productCurrentPage.value = val
+  getProduct()
+}
+
+const handleServerSizeChange = (val: number) => {
+  console.log(`${val} items per page`)
+}
+
+const handleServerCurrentChange = (val: number) => {
+  serverCurrentPage.value = val
+  getCategory()
+}
+
+onMounted(() => {
+  getCategory()
+  getProduct()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -242,6 +511,7 @@ onMounted(() => {})
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    height: 78vh;
     :deep(.el-card__body) {
       padding: 0px;
     }
@@ -267,6 +537,8 @@ onMounted(() => {})
 
     .button-wrap {
       display: flex;
+      justify-content: center;
+      width: 100%;
     }
   }
 }

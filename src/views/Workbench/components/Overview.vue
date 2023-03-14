@@ -40,7 +40,7 @@
         <el-card style="max-height: 40vh; width: 49%; margin-top: 15px">
           <div class="operationan-title">
             <span>云监控</span>
-            <span class="operationan-regionName">【陶然亭】</span>
+            <!-- <span class="operationan-regionName">【陶然亭】</span> -->
           </div>
           <div class="operationan-items">
             <div class="operationan-item">
@@ -65,21 +65,21 @@
             <div class="cpu-item">
               <div class="cpu-item-title">
                 <span>CPU使用率</span>
-                <span>0%</span>
+                <span>20%</span>
               </div>
               <div>
-                <el-progress :text-inside="false" :show-text="false" type="line" :stroke-width="20" status="exception" style="width: 100%; height: 10px" />
+                <el-progress :text-inside="false" :show-text="false" type="line" :stroke-width="20" status="exception" style="width: 100%; height: 10px" :percentage="20" />
               </div>
             </div>
             <div class="ecs-target-item">
               <span>磁盘读取率</span>
               <div class="line"></div>
-              <span>0 KB/S</span>
+              <span>299 KB/S</span>
             </div>
             <div class="ecs-target-item">
               <span>网络流入速率</span>
               <div class="line"></div>
-              <span>0 Kbit/S</span>
+              <span>897 Kbit/S</span>
             </div>
           </div>
         </el-card>
@@ -109,8 +109,8 @@
           <div class="top">
             <h4>访问管理</h4>
             <div class="account-button">
-              <el-button type="primary" link>新增用户</el-button>
-              <el-button type="primary" link>添加权限</el-button>
+              <!-- <el-button type="primary" link>新增用户</el-button>
+              <el-button type="primary" link>添加权限</el-button> -->
             </div>
           </div>
           <div class="app-overview-row">
@@ -483,6 +483,7 @@ onMounted(async () => {
         align-items: center;
         margin-right: 25px;
         cursor: pointer;
+        color: #252b3a;
         &:hover {
           color: #409eff !important;
         }
@@ -490,10 +491,12 @@ onMounted(async () => {
           margin-right: 5px;
           font-size: 16px;
           line-height: 22px;
+          &:hover {
+            color: #409eff !important;
+          }
         }
         span {
           font-size: 14px;
-          color: #252b3a;
           &:hover {
             color: #409eff !important;
           }

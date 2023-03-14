@@ -152,7 +152,6 @@ onMounted(() => {
   left: 0px;
   height: calc(100vh - 50px);
   z-index: 999999;
-
   --el-menu-base-level-padding: 10px !important;
   &:not(.el-menu--collapse) {
     width: 200px;

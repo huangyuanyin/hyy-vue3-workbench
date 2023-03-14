@@ -78,7 +78,7 @@
                 <el-card style="height: 35vh; width: 49%">
                   <div class="operationan-title">
                     <span>云监控</span>
-                    <span class="operationan-regionName">【陶然亭】</span>
+                    <!-- <span class="operationan-regionName">【陶然亭】</span> -->
                   </div>
                   <div class="operationan-items">
                     <div class="operationan-item">
@@ -112,12 +112,12 @@
                     <div class="ecs-target-item">
                       <span>磁盘读取率</span>
                       <div class="line"></div>
-                      <span>0 KB/S</span>
+                      <span>299 KB/S</span>
                     </div>
                     <div class="ecs-target-item">
                       <span>网络流入速率</span>
                       <div class="line"></div>
-                      <span>0 Kbit/S</span>
+                      <span>897 Kbit/S</span>
                     </div>
                   </div>
                 </el-card>
@@ -140,7 +140,7 @@
                 </span>
               </template>
               <!-- <el-card style="height: 78vh"> -->
-              <NavigationManagement />
+              <NavigationManagement :productList="productList" />
               <!-- </el-card> -->
             </el-tab-pane>
           </el-tabs>
@@ -159,16 +159,25 @@ import ResourceManagement from '../resourceManagement/index.vue'
 import Overview from './components/Overview.vue'
 import CollapseMenu from '@/components/CollapseMenu.vue'
 import NavigationManagement from '../navigationManagement/index.vue'
+import { getProductApi } from '@/api/navigationManageAPI'
 
 const username = JSON.parse(localStorage.getItem('userInfo')).role
 const activeName = ref('overview')
+const productList = ref([]) // 产品列表
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
 
+const getProduct = async () => {
+  const res = await getProductApi()
+  if (res.code === 1000) {
+    productList.value = res.data || []
+  }
+}
+
 onMounted(() => {
-  console.log(`output->username`, username)
+  getProduct()
 })
 </script>
 

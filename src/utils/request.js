@@ -53,7 +53,7 @@ service.interceptors.response.use(
     console.log(`output->error`, error)
     // 对响应错误做点什么
     ElMessage({
-      message: error.response.data.name || '请求失败',
+      message: error.response.data.detail || '请求失败',
       type: 'error',
       duration: 1000
     })
