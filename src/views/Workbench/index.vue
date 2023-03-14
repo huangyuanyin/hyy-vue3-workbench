@@ -162,11 +162,11 @@ import NavigationManagement from '../navigationManagement/index.vue'
 import { getProductApi } from '@/api/navigationManageAPI'
 
 const username = JSON.parse(localStorage.getItem('userInfo')).role
-const activeName = ref('overview')
+const activeName = ref(JSON.parse(localStorage.getItem('activeName')) || 'overview')
 const productList = ref([]) // 产品列表
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
+  localStorage.setItem('activeName', JSON.stringify(tab.props.name))
 }
 
 const getProduct = async () => {
@@ -198,8 +198,7 @@ onMounted(() => {
     width: 100vw;
     margin-top: 52px;
     background-color: #eef0f5;
-    padding: 15px;
-    margin-left: 47px;
+    padding: 15px 25px 15px 75px;
   }
 }
 .body-wrap::before {

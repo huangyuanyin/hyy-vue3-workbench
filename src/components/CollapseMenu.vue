@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <el-row>
+  <div class="productList-item">
+    <el-row style="width: 100vw">
       <el-col :span="4">
-        <el-menu default-active="" class="elMenu-wrap" :collapse="isCollapse && !isShowCard" @mouseover.prevent="handleOpen" @mouseleave.once="handleClose">
+        <el-menu default-active="" class="elMenu-wrap" :collapse="isCollapse && !isShowCard" @mouseover.prevent="handleOpen" @mouseleave="handleClose">
           <el-menu-item index="prodandserver" class="mainMenu" @mouseenter.native="openMenu" :disabled="true">
             <el-icon><Grid /></el-icon>
             <template #title>
@@ -12,15 +12,17 @@
               </div>
             </template>
           </el-menu-item>
-          <template v-for="(item, index) in productList" :key="'productList' + index">
-            <el-menu-item :index="item.name" v-if="item.is_domain" @click="handleSelect(item)">
-              <svg-icon iconName="icon-jiekouzhushou" className="icon" style="width: 24px"></svg-icon>
-              <template #title>
-                <span class="title-name" style="margin-right: 5px">{{ item.name }}</span>
-                {{ item.tag }}
-              </template>
-            </el-menu-item>
-          </template>
+          <div style="height: calc(100vh - 160px)">
+            <template v-for="(item, index) in productList" :key="'productList' + index">
+              <el-menu-item :index="item.name" v-if="item.is_domain" @click="handleSelect(item)">
+                <svg-icon iconName="icon-jiekouzhushou" className="icon" style="width: 24px"></svg-icon>
+                <template #title>
+                  <span class="title-name" style="margin-right: 5px">{{ item.name }}</span>
+                  {{ item.tag }}
+                </template>
+              </el-menu-item>
+            </template>
+          </div>
         </el-menu>
       </el-col>
       <el-col :span="20" class="server-wrap">
@@ -56,22 +58,25 @@ const filter = ref('') // 搜索
 const serverList = ref([]) // 服务列表
 const productList = ref([]) // 产品列表
 
-const handleOpen = (key: string, keyPath: string[]) => {
+const handleOpen = () => {
   isCollapse.value = false
 }
 
-const handleClose = (key: string, keyPath: string[]) => {
-  if (isShowCard) {
+const handleClose = () => {
+  if (isShowCard.value && !isCollapse.value) {
     return
+  } else {
+    setTimeout(() => {
+      isCollapse.value = true
+    }, 200)
   }
-  isCollapse.value = true
 }
 
 const openMenu = () => {
   if (!isCollapse.value) {
     setTimeout(() => {
       isShowCard.value = true
-    }, 500)
+    }, 200)
   }
 }
 
@@ -143,8 +148,13 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.productList-item {
+  height: calc(100% - 50px);
+  position: absolute;
+}
 :deep(.el-menu--collapse) {
   z-index: 3 !important;
+  width: 55px;
 }
 .elMenu-wrap {
   position: absolute;
@@ -152,7 +162,7 @@ onMounted(() => {
   left: 0px;
   height: calc(100vh - 50px);
   z-index: 999999;
-  --el-menu-base-level-padding: 10px !important;
+  --el-menu-base-level-padding: 15px !important;
   &:not(.el-menu--collapse) {
     width: 200px;
   }
@@ -163,7 +173,7 @@ onMounted(() => {
     margin-right: 20px;
   }
   .el-menu-item {
-    font-size: 12px !important;
+    font-size: 14px !important;
     font-family: '微软雅黑';
   }
   .el-menu-item.is-disabled {
@@ -211,7 +221,7 @@ onMounted(() => {
   top: 50px;
   z-index: 20000;
   left: 198px;
-  min-width: 30%;
+  min-width: 40%;
   font-size: 16px !important;
   font-family: '微软雅黑';
   border-radius: 0;
@@ -224,6 +234,7 @@ onMounted(() => {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
+    padding: 20px 35px;
   }
   :deep(.el-card__header) {
     height: 70px;
@@ -239,13 +250,15 @@ onMounted(() => {
     // margin-top: 15px;
     width: 33%;
     .span-title {
-      font-weight: 800;
-      font-family: '宋体';
+      font-weight: 700;
+      font-family: '微软雅黑';
     }
     .button {
-      margin-top: 5px;
+      margin-top: 10px;
+      margin-left: 10px;
       .el-button {
-        font-size: 16px;
+        font-size: 14px;
+        font-family: '微软雅黑';
       }
     }
   }

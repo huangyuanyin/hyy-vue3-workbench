@@ -609,6 +609,7 @@ onMounted(async () => {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
+          align-items: center;
           .item-label {
             color: #888;
             margin-right: 4px;

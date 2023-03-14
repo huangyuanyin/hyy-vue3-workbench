@@ -9,7 +9,7 @@
           :key="'navigationTypes' + index"
           :class="isCategory === index ? 'at-nav-item-actived' : ''"
         >
-          <div class="at-nav-item-main">{{ item.label }}</div>
+          <div class="at-nav-item-main" style="font-size: 14px; font-weight: 600">{{ item.label }}</div>
         </li>
       </ul>
     </el-card>
@@ -465,6 +465,7 @@ onMounted(() => {
         cursor: pointer;
         display: flex;
         align-items: center;
+        font-weight: 800;
         margin: 8px 0;
         height: 32px;
         line-height: 32px;
