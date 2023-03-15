@@ -58,7 +58,7 @@
             @current-change="handleServerCurrentChange"
           />
 
-          <el-table v-if="isCategory === 1" :data="productTableData" stripe width="100%" height="56vh">
+          <el-table v-if="isCategory === 1" :data="productTableData" stripe width="100%" max-height="52vh">
             <el-table-column prop="name" label="服务名" align="center" />
             <el-table-column prop="tag" label="标识" align="center">
               <template #default="scope">
@@ -147,11 +147,30 @@
             </el-select>
           </el-form-item>
           <el-form-item label="图标" prop="icon">
-            <el-select v-model="productForm.icon" placeholder="请选择图标">
-              <el-option v-for="item in iconList" :key="item" :label="item" :value="item">
-                <svg-icon :iconName="item" className="icon" style="width: 170px; height: 25px"></svg-icon>
-              </el-option>
-            </el-select>
+            <el-popover placement="bottom" :width="400" trigger="click" v-model:visible="iconPopver">
+              <template #reference>
+                <el-select
+                  v-model="productForm.icon"
+                  placeholder="请选择图标"
+                  @blur="iconPopver = false"
+                  @focus="iconPopver = true"
+                  reserve-keyword
+                  remote
+                  remote-show-suffix
+                ></el-select>
+              </template>
+              <div class="iconList">
+                <svg-icon
+                  v-for="item in iconList"
+                  :class="[productForm.icon === item ? 'iconbackground' : '']"
+                  :key="item"
+                  :iconName="item"
+                  className="icon"
+                  style="width: 50px; height: 30px"
+                  @click="productForm.icon = item"
+                ></svg-icon>
+              </div>
+            </el-popover>
           </el-form-item>
           <el-form-item label="服务名" prop="name">
             <el-input v-model="productForm.name" placeholder="请输入服务名" maxlength="30" show-word-limit />
@@ -217,6 +236,7 @@ import { utc2beijing } from '@/utils/util'
 import { Edit, Search } from '@element-plus/icons-vue'
 import { iconList } from '@/data/index.js'
 
+const iconPopver = ref(false)
 const inputSearch = ref('')
 const isCategory = ref(0)
 const dialogVisible = ref(false)
@@ -593,6 +613,19 @@ onMounted(async () => {
       justify-content: center;
       width: 100%;
     }
+  }
+}
+.iconList {
+  .svg-icon {
+    margin-bottom: 20px;
+    cursor: pointer;
+    &:hover {
+      // 浅蓝色
+      background-color: #f0f8ff;
+    }
+  }
+  .iconbackground {
+    background-color: #e0ffff;
   }
 }
 </style>

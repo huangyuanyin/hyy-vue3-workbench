@@ -39,9 +39,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   function (response) {
     // 对响应数据做点什么
-    if (response.data.code == '1001') {
+    if (response.data.code !== 1000) {
       ElMessage({
-        message: response.data?.msg || '请求失败',
+        message: error.response.data.msg || '请求失败',
         type: 'error',
         duration: 1000
       })
@@ -50,10 +50,10 @@ service.interceptors.response.use(
     return response.data
   },
   function (error) {
-    console.log(`output->error`, error)
+    console.log(`output->error`, error.response.data.msg)
     // 对响应错误做点什么
     ElMessage({
-      message: error.response.data.detail || '请求失败',
+      message: error.response.data.msg || '请求失败',
       type: 'error',
       duration: 1000
     })

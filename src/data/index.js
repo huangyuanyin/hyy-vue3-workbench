@@ -10,7 +10,19 @@ export const iconList = [
   'icon-ptsxingnengceshiPTS',
   'icon-yanfa',
   'icon-xinicon_huabanfuben',
-  'icon-bendishujujieruceshi'
+  'icon-bendishujujieruceshi',
+  'icon-liuliangyunpingtaitubiao01',
+  'icon-liuliangyunpingtaitubiao06',
+  'icon-liuliangyunpingtaitubiao07',
+  'icon-liuliangyunpingtaitubiao08',
+  'icon-erji-zichanloudongsaomiaobaobiao',
+  'icon-bingzhuangtu',
+  'icon-shujufenxi',
+  'icon-yuanshujufenxi',
+  'icon-yunweifenxipingtai',
+  'icon-danshujufenxi',
+  'icon-qudaoshujufenxi',
+  'icon-jisuanjijifanghuanjingshebeiqiangzhipinggushenqing-copy-copy'
 ]
 
 export const roleList = [

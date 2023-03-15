@@ -1,7 +1,7 @@
 <template>
   <div class="Overview-wrap">
     <div class="wrap-left">
-      <el-card style="min-height: 35vh">
+      <el-card style="height: 35vh">
         <div class="overview-title">
           <span class="title">我的导航</span>
         </div>
