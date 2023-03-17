@@ -21,17 +21,16 @@ export const useUserStore = defineStore({
     async Login(loginInfo: { username: string; password: string }) {
       const { token } = await login(loginInfo)
       this.userInfo = jwt_decode(token)
-      localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
       this.token = token
       setToken(this.token)
-      sessionStorage.setItem('token', this.token)
+      localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
+      localStorage.setItem('token', JSON.stringify(this.token))
       return token
     },
     async LoginOut() {
       await removeToken()
-      localStorage.removeItem('userInfo')
-      localStorage.removeItem('jwtToken')
-      sessionStorage.removeItem('token')
+      // 清除localStorage全部数据
+      localStorage.clear()
     }
   }
 })
