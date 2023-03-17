@@ -12,7 +12,7 @@ export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
     userInfo: {} as BaseUserInfo,
-    token: '' as string
+    token: null
   }),
   getters: {
     nickName: (state) => state.userInfo.nickName
@@ -24,13 +24,14 @@ export const useUserStore = defineStore({
       this.token = token
       setToken(this.token)
       localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
-      localStorage.setItem('token', JSON.stringify(this.token))
+      localStorage.setItem('token', this.token.replace(/\'/g, ''))
       return token
     },
     async LoginOut() {
       await removeToken()
       // 清除localStorage全部数据
       localStorage.clear()
+      sessionStorage.clear()
     }
   }
 })

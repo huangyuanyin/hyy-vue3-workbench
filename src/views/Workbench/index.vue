@@ -161,7 +161,7 @@ import CollapseMenu from '@/components/CollapseMenu.vue'
 import NavigationManagement from '../navigationManagement/index.vue'
 import { getProductApi } from '@/api/navigationManageAPI'
 
-const username = JSON.parse(localStorage.getItem('userInfo')).role
+const username = ref('') // 用户名
 const activeName = ref(JSON.parse(localStorage.getItem('activeName')) || 'overview')
 const productList = ref([]) // 产品列表
 
@@ -178,6 +178,7 @@ const getProduct = async () => {
 
 onMounted(() => {
   getProduct()
+  username.value = JSON.parse(localStorage.getItem('userInfo'))?.role
 })
 </script>
 
