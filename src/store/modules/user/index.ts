@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { login } from '@/api/user'
 import jwt_decode from 'jwt-decode'
-import { removeToken, setToken } from '@/utils/auth'
+// import { removeToken, setToken } from '@/utils/auth'
 
 interface BaseUserInfo {
   id: string
@@ -22,13 +22,13 @@ export const useUserStore = defineStore({
       const { token } = await login(loginInfo)
       this.userInfo = jwt_decode(token)
       this.token = token
-      setToken(this.token)
+      // setToken(this.token)
       localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
       localStorage.setItem('token', this.token.replace(/\'/g, ''))
       return token
     },
     async LoginOut() {
-      await removeToken()
+      // removeToken()
       // 清除localStorage全部数据
       localStorage.clear()
       sessionStorage.clear()

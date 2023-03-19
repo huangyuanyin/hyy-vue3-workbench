@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { getToken } from './auth'
+// import { getToken } from './auth'
 
 const service = axios.create({
   timeout: 12000
@@ -11,8 +11,8 @@ service.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
     // 往header头中自动添加token
-    const hastoken = getToken()
-    if (hastoken && config.url !== '/forum/login/' && config.url !== '/datas/datas/' && config.url !== '/WEBt/terminals/') {
+    const hastoken = localStorage.getItem('token')
+    if (hastoken && config.url !== '/forum/login/') {
       config.headers['token'] = hastoken
     }
     switch (config.urlType) {

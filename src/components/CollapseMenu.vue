@@ -51,12 +51,14 @@ import { ElMessage } from 'element-plus'
 import { Grid, CaretRight, Close } from '@element-plus/icons-vue'
 import { getCategoryApi, getProductApi } from '@/api/navigationManageAPI'
 import { emitter } from '@/utils/mitt'
+// import { getToken } from '@/utils/auth'
 
 const isCollapse = ref(true)
 const isShowCard = ref(false)
 const filter = ref('') // 搜索
 const serverList = ref([]) // 服务列表
 const productList = ref([]) // 产品列表
+const token = ref(localStorage.getItem('token'))
 
 const handleOpen = () => {
   isCollapse.value = false
@@ -82,12 +84,14 @@ const handleCloseCard = () => {
 // 侧边栏响应
 const handleSelect = (value: any) => {
   window.location.href = value.links
+  localStorage.setItem('token', token.value)
 }
 
 // 产品服务链接跳转
 const goTo = (value: any) => {
   if (!value.enabled) return ElMessage.warning('该服务暂未开放')
-  window.open(value.links, '_blank')
+  window.location.href = value.links
+  localStorage.setItem('token', token.value)
   localStorage.getItem('linkList') ? '' : localStorage.setItem('linkList', JSON.stringify({ link: JSON.stringify(value.links) }))
 }
 

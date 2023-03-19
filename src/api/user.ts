@@ -5,6 +5,7 @@ export function login(data: any) {
     url: '/user/login/',
     method: 'post',
     urlType: 'Login',
+    whitelist: true,
     data
   })
 }
