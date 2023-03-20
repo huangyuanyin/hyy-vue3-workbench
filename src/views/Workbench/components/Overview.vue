@@ -208,7 +208,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import user from '@/assets/user.png'
 import type { TabsPaneContext } from 'element-plus'
 import { Search, Close, CircleCheckFilled, CirclePlusFilled } from '@element-plus/icons-vue'
@@ -402,6 +402,19 @@ const changeFavorite = async (val) => {
 onMounted(async () => {
   await sumList()
   await getProduct()
+  window.addEventListener('setItemEvent', (e: any) => {
+    if (e.key == 'recentLinks') {
+      visitedList.value = JSON.parse(e.newValue)
+    }
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('setItemEvent', (e: any) => {
+    if (e.key == 'recentLinks') {
+      visitedList.value = JSON.parse(e.newValue)
+    }
+  })
 })
 </script>
 

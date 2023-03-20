@@ -297,7 +297,6 @@ const addNavigation = () => {
 }
 
 const searchProduct = async (val) => {
-  console.log(`output->val`, val)
   productCurrentPage.value = 1
   const params = {
     category: val,
@@ -431,7 +430,6 @@ const editProduct = async (params) => {
 const toGetCategoryList = (val) => {}
 
 const getCategory = async (...args) => {
-  console.log(`output->args`, args[0])
   const res = await getCategoryApi()
   if (res.code === 1000) {
     categoryList.value = res.data || []
@@ -453,12 +451,11 @@ const getProduct = async () => {
     // 遍历获取serverTableData.value和categoryList.value，如果有相同的，就把categoryList.value的id赋值给serverTableData.value的category
     productTableData.value.forEach((item) => {
       categoryList.value.forEach((item2) => {
-        if (item2.id === item.category) {
+        if (item2.id === item.category.id) {
           item.category = item2.name
         }
       })
     })
-    console.log(`output->`, productTableData.value, categoryList.value)
   }
 }
 

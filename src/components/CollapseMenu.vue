@@ -83,6 +83,7 @@ const handleCloseCard = () => {
 
 // 侧边栏响应
 const handleSelect = (value: any) => {
+  getRecentLinks(value)
   window.location.href = value.links
   localStorage.setItem('token', token.value)
 }
@@ -90,9 +91,25 @@ const handleSelect = (value: any) => {
 // 产品服务链接跳转
 const goTo = (value: any) => {
   if (!value.enabled) return ElMessage.warning('该服务暂未开放')
+  getRecentLinks(value)
   window.location.href = value.links
   localStorage.setItem('token', token.value)
   localStorage.getItem('linkList') ? '' : localStorage.setItem('linkList', JSON.stringify({ link: JSON.stringify(value.links) }))
+}
+
+const recentLinks = ref(JSON.parse(localStorage.getItem('recentLinks')) || [])
+const getRecentLinks = (val) => {
+  recentLinks.value.unshift({ name: val.name, links: val.links })
+  recentLinks.value = recentLinks.value
+    .reduce((cur, next) => {
+      const index = cur.findIndex((item) => item.name === next.name)
+      if (index === -1) {
+        cur.push(next)
+      }
+      return cur
+    }, [])
+    .slice(0, 6)
+  localStorage.setItem('recentLinks', JSON.stringify(recentLinks.value))
 }
 
 // 获取服务分组列表
@@ -116,7 +133,7 @@ const getProduct = async () => {
 const handleServerList = () => {
   serverList.value.forEach((item: any) => {
     productList.value.forEach((item2: any) => {
-      if (item.id === item2.category) {
+      if (item.id === item2.category?.id) {
         if (!item.children) {
           item.children = []
         }
