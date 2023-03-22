@@ -186,14 +186,14 @@
         <el-col :span="10">
           <el-form-item label="是否生效" prop="enabled">
             <el-select v-model="productForm.enabled">
-              <el-option label="是" value="True" />
-              <el-option label="否" value="False" />
+              <el-option label="是" value="是" />
+              <el-option label="否" value="否" />
             </el-select>
           </el-form-item>
           <el-form-item label="是否侧边显示" prop="is_domain">
             <el-select v-model="productForm.is_domain">
-              <el-option label="是" value="True" />
-              <el-option label="否" value="False" />
+              <el-option label="是" value="是" />
+              <el-option label="否" value="否" />
             </el-select>
           </el-form-item>
           <el-form-item label="跳转地址" prop="links"> <el-input v-model="productForm.links" placeholder="例如：http://www.baidu.com" /></el-form-item>
