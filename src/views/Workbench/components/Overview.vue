@@ -191,7 +191,7 @@
         <el-input v-model="formInline.name" placeholder="请输入入口名称" />
       </el-form-item>
       <el-form-item label="入口链接" prop="links" label-width="80px">
-        <el-input v-model="formInline.links" placeholder="请输入入口链接" />
+        <el-input v-model="formInline.links" placeholder="链接请以http/https开头，例如：https://www.baidu.com" />
       </el-form-item>
       <el-form-item label="" prop="" label-width="80px" v-if="isTag">
         <el-icon color="#50dA4B" style="margin-right: 5px"><CircleCheckFilled /></el-icon>
@@ -275,6 +275,9 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
+      if (!formInline.links.startsWith('http://') && !formInline.links.startsWith('https://')) {
+        formInline.links = 'https://' + formInline.links
+      }
       if (favoriteList.value.length >= 12) return ElMessage.warning('最多添加12个快捷入口')
       addProduct(formInline)
     }
