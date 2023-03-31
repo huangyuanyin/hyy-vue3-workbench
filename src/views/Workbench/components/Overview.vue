@@ -1,7 +1,7 @@
 <template>
   <div class="Overview-wrap">
     <div class="wrap-left">
-      <el-card style="height: 35vh">
+      <el-card style="height: 37vh">
         <div class="overview-title">
           <span class="title">我的导航</span>
         </div>
@@ -86,7 +86,7 @@
       </div>
     </div>
     <div class="wrap-right">
-      <el-card style="height: 35vh">
+      <el-card style="height: 37vh">
         <div class="_ov-user">
           <div class="_ov-user-info">
             <img :src="user" alt="" />

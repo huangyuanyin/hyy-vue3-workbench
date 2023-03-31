@@ -143,6 +143,15 @@
               <NavigationManagement :productList="productList" />
               <!-- </el-card> -->
             </el-tab-pane>
+            <el-tab-pane name="userManage" v-if="username === 'admin'">
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><User /></el-icon>
+                  <span>用户管理</span>
+                </span>
+              </template>
+              <UserManagement />
+            </el-tab-pane>
           </el-tabs>
         </div>
       </el-container>
@@ -153,12 +162,13 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
-import { Calendar, TrendCharts, Ticket, List, Promotion } from '@element-plus/icons-vue'
+import { Calendar, TrendCharts, Ticket, List, Promotion, User } from '@element-plus/icons-vue'
 import WorkbenchTopMenu from './components/WorkbenchTopMenu.vue'
 import ResourceManagement from '../resourceManagement/index.vue'
 import Overview from './components/Overview.vue'
 import CollapseMenu from '@/components/CollapseMenu.vue'
 import NavigationManagement from '../navigationManagement/index.vue'
+import UserManagement from '../userManagement/index.vue'
 import { getProductApi } from '@/api/navigationManageAPI'
 
 const username = ref('') // 用户名

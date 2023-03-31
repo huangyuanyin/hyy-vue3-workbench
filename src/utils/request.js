@@ -13,7 +13,7 @@ service.interceptors.request.use(
     // 往header头中自动添加token
     const hastoken = localStorage.getItem('token')
     if (hastoken && config.url !== '/forum/login/') {
-      config.headers['token'] = hastoken
+      config.headers['Authorization'] = hastoken
     }
     switch (config.urlType) {
       case 'Xterm':
@@ -24,6 +24,9 @@ service.interceptors.request.use(
         break
       case 'NetDevOps':
         config.url = import.meta.env.VITE_BASE_URL + config.url
+        break
+      case 'NetUser':
+        config.url = import.meta.env.VITE_BASE_USER_URL + config.url
         break
     }
     // 请求拦截进来 显示loading效果
@@ -41,7 +44,7 @@ service.interceptors.response.use(
     // 对响应数据做点什么
     if (response.data.code !== 1000) {
       ElMessage({
-        message: error.response.data.msg || '请求失败',
+        message: response.msg || response.data.msg || '请求失败',
         type: 'error',
         duration: 1000
       })
