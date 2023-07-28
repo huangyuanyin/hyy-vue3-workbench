@@ -15,7 +15,7 @@
                   <span>概览</span>
                 </span>
               </template>
-              <Overview />
+              <Overview :isPolling="isPolling" />
             </el-tab-pane>
             <el-tab-pane name="resourceManagement">
               <template #label>
@@ -160,7 +160,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import { Calendar, TrendCharts, Ticket, List, Promotion, User } from '@element-plus/icons-vue'
 import WorkbenchTopMenu from './components/WorkbenchTopMenu.vue'
@@ -172,11 +172,21 @@ import UserManagement from '../userManagement/index.vue'
 import { getProductApi } from '@/api/navigationManageAPI'
 
 const username = ref('') // 用户名
-const activeName = ref(JSON.parse(localStorage.getItem('activeName')) || 'overview')
+const activeName = ref(JSON.parse(sessionStorage.getItem('activeName')) || 'overview')
 const productList = ref([]) // 产品列表
+const isPolling = ref(false) // 是否轮询
+
+watchEffect(() => {
+  console.log(`output->activeName.value`, activeName.value)
+  if (activeName.value === 'overview') {
+    isPolling.value = true
+  } else {
+    isPolling.value = false
+  }
+})
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  localStorage.setItem('activeName', JSON.stringify(tab.props.name))
+  sessionStorage.setItem('activeName', JSON.stringify(tab.props.name))
 }
 
 const getProduct = async () => {
@@ -219,7 +229,7 @@ onMounted(() => {
   opacity: 1;
   width: 100%;
   height: 187px;
-  background-image: url('https://cloudcache.tencentcs.com/qcloud/tea/app/overview.b7e9453acd02d3b41e82dcd390be777c.png');
+  background-image: url('@/assets/bg.png');
   background-size: auto 100%;
   background-repeat: repeat;
   background-position: top;

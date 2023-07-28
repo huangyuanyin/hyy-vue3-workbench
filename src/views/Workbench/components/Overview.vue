@@ -58,28 +58,53 @@
           </div>
         </el-card>
         <el-card style="height: 100%; width: 49%">
-          <div class="operationan-title">
+          <div class="operationan-title extra_style">
             <span>ESC资源监控</span>
           </div>
           <div class="esc-wrap">
-            <div class="cpu-item">
+            <!-- <div class="cpu-item" v-for="(item, index) in usageList" :key="'usageList' + index">
               <div class="cpu-item-title">
-                <span>CPU使用率</span>
-                <span>20%</span>
+                <span>{{ item.label }}</span>
+                <span>{{ item.value }} %</span>
               </div>
               <div>
-                <el-progress :text-inside="false" :show-text="false" type="line" :stroke-width="20" status="exception" style="width: 100%; height: 10px" :percentage="20" />
+                <el-progress
+                  :text-inside="false"
+                  :show-text="false"
+                  type="line"
+                  :stroke-width="10"
+                  :status="Number(item.value) <= 40 ? 'format' : Number(item.value) > 40 && Number(item.value) <= 80 ? 'warning' : 'exception'"
+                  :percentage="item.value"
+                />
+              </div>
+            </div> -->
+            <div class="cpu-item">
+              <el-progress
+                type="dashboard"
+                :status="Number(item.value) <= 40 ? 'success' : Number(item.value) > 40 && Number(item.value) <= 80 ? 'warning' : 'exception'"
+                :percentage="item.value"
+                v-for="(item, index) in usageList"
+                :key="'usageList' + index"
+              >
+                <template #default="{ percentage }">
+                  <span class="percentage-value">{{ percentage }}%</span>
+                  <span class="percentage-label">{{ item.label }}</span>
+                </template>
+              </el-progress>
+            </div>
+            <div>
+              <div class="ecs-target-item" v-for="(item, index) in rateList" :key="'rateList' + index" style="margin: 8px 0">
+                <span>{{ item.label }}</span>
+                <div class="line"></div>
+                <span>{{ item.value }} KB/S</span>
               </div>
             </div>
-            <div class="ecs-target-item">
-              <span>磁盘读取率</span>
-              <div class="line"></div>
-              <span>299 KB/S</span>
-            </div>
-            <div class="ecs-target-item">
-              <span>网络流入速率</span>
-              <div class="line"></div>
-              <span>897 Kbit/S</span>
+            <div class="network_package_item">
+              <el-descriptions direction="vertical" :column="2" size="small" border>
+                <el-descriptions-item :label="item.label" align="center" v-for="(item, index) in networkPackageList" :key="'networkPackageList' + index">
+                  <spam style="color: #409eff">{{ item.value }} count/s</spam>
+                </el-descriptions-item>
+              </el-descriptions>
             </div>
           </div>
         </el-card>
@@ -208,7 +233,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, watch, watchEffect } from 'vue'
 import user from '@/assets/user.png'
 import type { TabsPaneContext } from 'element-plus'
 import { Search, Close, CircleCheckFilled, CirclePlusFilled } from '@element-plus/icons-vue'
@@ -216,6 +241,14 @@ import { getProductApi, getFavoriteApi, getAddProductApi, addFavoriteApi, remove
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { roleList } from '@/data/index'
+import { getDeviceMonitorApi } from '@/api/overview'
+
+const props = defineProps({
+  isPolling: {
+    type: Boolean,
+    default: true
+  }
+})
 
 const activeName = ref('first')
 const docsActiveName = ref('first')
@@ -241,6 +274,21 @@ const favoriteList = ref([]) // 收藏入口列表
 const productEntranceList = ref([]) // 云服务入口列表
 const customizeEntranceList = ref([]) // 自定义入口列表
 const visitedList = ref(localStorage.getItem('recentLinks') ? JSON.parse(localStorage.getItem('recentLinks')) : [])
+const rateList = ref([
+  { label: '硬盘读取速率', value: '' },
+  { label: '硬盘写入速率', value: '' },
+  { label: '网口每秒接收字节数', value: '' },
+  { label: '网口每秒发送字节数', value: '' }
+])
+const usageList = ref([
+  { label: 'CPU使用率', value: '' },
+  { label: '内存使用率', value: '' },
+  { label: '硬盘使用率', value: '' }
+])
+const networkPackageList = ref([
+  { label: '网口每秒接收包数', value: '' },
+  { label: '网口每秒发送包数', value: '' }
+])
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {}
 
@@ -401,6 +449,41 @@ const changeFavorite = async (val) => {
   if (favoriteList.value.length >= 12) return ElMessage.warning('最多添加12个快捷入口')
   val.isShow === true ? '' : addService(val)
 }
+
+const getDeviceMonitor = async () => {
+  let res = await getDeviceMonitorApi()
+  if (res.code === 1000) {
+    rateList.value[0].value = res.data.disk_read_rate
+    rateList.value[1].value = res.data.disk_write_rate
+    rateList.value[2].value = res.data.network_recv
+    rateList.value[3].value = res.data.network_sent
+
+    usageList.value[0].value = res.data.cpu_usage
+    usageList.value[1].value = res.data.memory_usage
+    usageList.value[2].value = res.data.disk_usage
+
+    networkPackageList.value[0].value = res.data.network_package_recv
+    networkPackageList.value[1].value = res.data.network_package_sent
+  }
+}
+
+const fetchData = async () => {
+  await getDeviceMonitor()
+  // 当 isPolling 变量为 true 时继续轮询
+  if (props.isPolling) {
+    setTimeout(fetchData, 5500) // 5秒钟
+  }
+}
+
+watch(
+  () => props.isPolling,
+  (val) => {
+    if (val) {
+      fetchData()
+    }
+  },
+  { immediate: true }
+)
 
 onMounted(async () => {
   await sumList()
@@ -784,6 +867,9 @@ onUnmounted(() => {
 .OperationandMaintenanceManagement {
   display: flex;
   justify-content: space-between;
+  .extra_style {
+    margin-bottom: 15px !important;
+  }
   .operationan-title {
     font-size: 18px;
     color: #252b3a;
@@ -818,18 +904,36 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 150px;
+    // height: 150px;
     padding: 0 20px;
     .cpu-item {
       display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      margin-bottom: 10px;
+      // flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      // margin-bottom: 10px;
       box-sizing: border-box;
       line-height: 40px;
       font-size: 14px;
       border-radius: 2px;
-      height: 40px;
+      // margin-top: 70px;
+      :deep(.el-progress-circle) {
+        width: 136px !important;
+        height: 136px !important;
+      }
+      :deep(.el-progress__text) {
+        font-size: 16px !important;
+      }
+      :deep(.percentage-value) {
+        display: block;
+        margin-top: 10px;
+        font-size: 28px;
+      }
+      :deep(.percentage-label) {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+      }
     }
     .cpu-item-title {
       display: flex;
@@ -841,9 +945,12 @@ onUnmounted(() => {
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      height: 40px;
-      // margin-top: 15px;
+      // height: 40px;
+
       font-size: 14px;
+      .ecs-target-item_value {
+        color: #409eff;
+      }
       .line {
         height: 0;
         width: 100%;
@@ -851,6 +958,9 @@ onUnmounted(() => {
         flex: 1;
         margin: 0 30px;
       }
+    }
+    .network_package_item {
+      margin-top: 8px;
     }
   }
 }
