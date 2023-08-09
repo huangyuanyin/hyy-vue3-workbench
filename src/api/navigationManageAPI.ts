@@ -5,7 +5,7 @@ export function getCategoryApi() {
   return request({
     url: '/product/category/',
     method: 'Get',
-    urlType: 'NetDevOps'
+    urlType: 'Drawer'
   })
 }
 
@@ -14,7 +14,7 @@ export function getCategoryIdApi(id) {
   return request({
     url: `/product/category/${id}`,
     method: 'Get',
-    urlType: 'NetDevOps'
+    urlType: 'Drawer'
   })
 }
 
@@ -23,7 +23,7 @@ export function getAddCategoryApi(params: any) {
   return request({
     url: '/product/category/',
     method: 'POST',
-    urlType: 'NetDevOps',
+    urlType: 'Drawer',
     data: params
   })
 }
@@ -33,7 +33,7 @@ export function getEditCategoryApi(id, params) {
   return request({
     url: `/product/category/${id}`,
     method: 'put',
-    urlType: 'NetDevOps',
+    urlType: 'Drawer',
     data: params
   })
 }
@@ -43,7 +43,7 @@ export function getDeleteCategoryApi(id) {
   return request({
     url: `/product/category/${id}`,
     method: 'Delete',
-    urlType: 'NetDevOps'
+    urlType: 'Drawer'
   })
 }
 
@@ -52,7 +52,7 @@ export function getProductApi() {
   return request({
     url: '/product/provider/',
     method: 'Get',
-    urlType: 'NetDevOps'
+    urlType: 'Drawer'
   })
 }
 
@@ -61,7 +61,7 @@ export function getProductCustomizeApi(params) {
   return request({
     url: '/product/provider/',
     method: 'Get',
-    urlType: 'NetDevOps',
+    urlType: 'Drawer',
     params
   })
 }
@@ -71,7 +71,7 @@ export function getProductIdApi(id) {
   return request({
     url: `/product/provider/${id}`,
     method: 'Get',
-    urlType: 'NetDevOps'
+    urlType: 'Drawer'
   })
 }
 
@@ -80,7 +80,7 @@ export function getAddProductApi(params) {
   return request({
     url: '/product/provider/',
     method: 'POST',
-    urlType: 'NetDevOps',
+    urlType: 'Drawer',
     data: params
   })
 }
@@ -90,7 +90,7 @@ export function getEditProductApi(id, params) {
   return request({
     url: `/product/provider/${id}`,
     method: 'put',
-    urlType: 'NetDevOps',
+    urlType: 'Drawer',
     data: params
   })
 }
@@ -100,7 +100,7 @@ export function getRemoveProductApi(id) {
   return request({
     url: `/product/provider/${id}`,
     method: 'Delete',
-    urlType: 'NetDevOps'
+    urlType: 'Drawer'
   })
 }
 
@@ -109,7 +109,7 @@ export function getFavoriteApi(params) {
   return request({
     url: '/product/favorite/',
     method: 'Get',
-    urlType: 'NetDevOps',
+    urlType: 'Drawer',
     params
   })
 }
@@ -119,7 +119,7 @@ export function addFavoriteApi(params) {
   return request({
     url: '/product/favorite/',
     method: 'POST',
-    urlType: 'NetDevOps',
+    urlType: 'Drawer',
     data: params
   })
 }
@@ -129,6 +129,6 @@ export function removeFavoriteApi(id) {
   return request({
     url: `/product/favorite/${id}`,
     method: 'Delete',
-    urlType: 'NetDevOps'
+    urlType: 'Drawer'
   })
 }

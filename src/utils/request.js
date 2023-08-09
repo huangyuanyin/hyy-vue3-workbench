@@ -25,6 +25,9 @@ service.interceptors.request.use(
       case 'NetDevOps':
         config.url = import.meta.env.VITE_BASE_URL + config.url
         break
+      case 'Drawer':
+        config.url = import.meta.env.VITE_DRAWER_URL + config.url
+        break
       case 'NetUser':
         config.url = import.meta.env.VITE_BASE_USER_URL + config.url
         break

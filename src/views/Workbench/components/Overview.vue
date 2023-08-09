@@ -93,19 +93,19 @@
               </el-progress>
             </div>
             <div>
-              <div class="ecs-target-item" v-for="(item, index) in rateList" :key="'rateList' + index" style="margin: 8px 0">
+              <div class="ecs-target-item" v-for="(item, index) in rateList" :key="'rateList' + index" style="margin: 20px 0">
                 <span>{{ item.label }}</span>
                 <div class="line"></div>
                 <span>{{ item.value }} KB/S</span>
               </div>
             </div>
-            <div class="network_package_item">
+            <!-- <div class="network_package_item">
               <el-descriptions direction="vertical" :column="2" size="small" border>
                 <el-descriptions-item :label="item.label" align="center" v-for="(item, index) in networkPackageList" :key="'networkPackageList' + index">
                   <spam style="color: #409eff">{{ item.value }} count/s</spam>
                 </el-descriptions-item>
               </el-descriptions>
-            </div>
+            </div> -->
           </div>
         </el-card>
       </div>
@@ -918,8 +918,8 @@ onUnmounted(() => {
       border-radius: 2px;
       // margin-top: 70px;
       :deep(.el-progress-circle) {
-        width: 136px !important;
-        height: 136px !important;
+        width: 146px !important;
+        height: 146px !important;
       }
       :deep(.el-progress__text) {
         font-size: 16px !important;
