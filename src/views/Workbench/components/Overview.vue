@@ -436,6 +436,9 @@ const toLink = (val) => {
       const index = cur.findIndex((item) => item.name === next.name)
       if (index === -1) {
         cur.push(next)
+      } else if (next.name === '信安知识库') {
+        // 如果name为“信安知识库”，则更新links值
+        cur[index].links = 'http://10.4.150.55:8080/netkmp/#/dashboard'
       }
       return cur
     }, [])
