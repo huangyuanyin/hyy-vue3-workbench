@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { login } from '@/api/user'
 import jwt_decode from 'jwt-decode'
 // import { removeToken, setToken } from '@/utils/auth'
+import CryptoJS from 'crypto-js'
+import { ElMessage } from 'element-plus'
 
 interface BaseUserInfo {
   id: string
@@ -19,13 +21,18 @@ export const useUserStore = defineStore({
   },
   actions: {
     async Login(loginInfo: { username: string; password: string }) {
-      const { token } = await login(loginInfo)
-      this.userInfo = jwt_decode(token)
-      this.token = token
-      // setToken(this.token)
-      localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
-      localStorage.setItem('token', this.token.replace(/\'/g, ''))
-      return token
+      loginInfo.password = CryptoJS.SHA512(loginInfo.password).toString(CryptoJS.enc.Base64)
+      let res = await login(loginInfo)
+      if (res.code === 1000) {
+        this.userInfo = jwt_decode(res.data.token)
+        this.token = res.data.token
+        localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
+        localStorage.setItem('token', this.token.replace(/\'/g, ''))
+        return res.data.token
+      } else {
+        ElMessage.error(res.msg)
+        return false
+      }
     },
     async LoginOut() {
       // removeToken()
