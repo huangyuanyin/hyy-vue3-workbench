@@ -132,7 +132,7 @@
               </template>
               <el-card style="height: 78vh"> 安全中心 </el-card>
             </el-tab-pane>
-            <el-tab-pane name="navigationManage" v-if="username === 'admin'">
+            <el-tab-pane name="navigationManage" v-if="username === '管理员'">
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><Promotion /></el-icon>
@@ -143,7 +143,7 @@
               <NavigationManagement :productList="productList" />
               <!-- </el-card> -->
             </el-tab-pane>
-            <el-tab-pane name="userManage" v-if="username === 'admin'">
+            <!-- <el-tab-pane name="userManage" v-if="username === '管理员'">
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><User /></el-icon>
@@ -151,7 +151,7 @@
                 </span>
               </template>
               <UserManagement />
-            </el-tab-pane>
+            </el-tab-pane> -->
           </el-tabs>
         </div>
       </el-container>

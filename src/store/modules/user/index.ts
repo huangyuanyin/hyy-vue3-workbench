@@ -24,7 +24,7 @@ export const useUserStore = defineStore({
       loginInfo.password = CryptoJS.SHA512(loginInfo.password).toString(CryptoJS.enc.Base64)
       let res = await login(loginInfo)
       if (res.code === 1000) {
-        this.userInfo = jwt_decode(res.data.token)
+        this.userInfo = res.data
         this.token = res.data.token
         localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
         localStorage.setItem('token', this.token.replace(/\'/g, ''))
