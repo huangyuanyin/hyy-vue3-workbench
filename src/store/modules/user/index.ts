@@ -28,6 +28,7 @@ export const useUserStore = defineStore({
         this.token = res.data.token
         localStorage.setItem('userInfo', JSON.stringify(this.userInfo))
         localStorage.setItem('token', this.token.replace(/\'/g, ''))
+        localStorage.setItem('isAuth', 'true')
         return res.data.token
       } else {
         ElMessage.error(res.msg)
